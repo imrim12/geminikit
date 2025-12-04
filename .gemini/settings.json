@@ -1,0 +1,50 @@
+{
+  "tools": {
+    "core": [
+      "run_shell_command",
+      "read_file",
+      "write_file",
+      "google_web_search",
+      "save_memory"
+    ]
+  },
+  "mcpServers": {
+    "saas-ops": {
+      "command": "bun",
+      "args": [
+        "run",
+        ".gemini/extensions/saas-mcp/index.ts"
+      ]
+    },
+    "sqlite": {
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sqlite",
+        "saas.db"
+      ]
+    }
+  },
+  "ui": {
+    "theme": "dark"
+  },
+  "approvalMode": "always",
+  "context": {
+    "fileFiltering": {
+      "respectGitIgnore": true,
+      "enableRecursiveFileSearch": true
+    },
+    "includeDirectories": [
+      "src",
+      "tests",
+      "docs",
+      ".gemini"
+    ],
+    "discoveryMaxDirs": 500
+  },
+  "prompts": {
+    "system": {
+      "path": ".gemini/commands/GEMINI.md"
+    }
+  }
+}

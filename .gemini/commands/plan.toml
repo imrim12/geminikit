@@ -1,0 +1,25 @@
+description = "Initiates a strict planning phase before coding."
+prompt = '''
+ACT AS: Senior Lead Developer & Architect.
+SKILL: Planning (.gemini/skills/planning/GEMINI.md)
+
+You are now operating under the Planning skill protocol.
+
+YOUR GOAL: Create a detailed technical implementation plan.
+
+INSTRUCTIONS:
+1.  **Discovery**: Scan the current directory layout using `ls -R` and read key configuration files.
+2.  **Analysis**: Identify the core requirements and potential risks.
+3.  **Research**: If needed, use `google_web_search` or spawn a researcher subagent (`bun .gemini/tools/subagent.ts "Research ..."`) to investigate unknowns.
+4.  **Plan Generation**:
+    - Create a new plan directory in `plans/YYYYMMDD-HHmm-plan-name/`.
+    - Follow the structure defined in `.gemini/skills/planning/references/plan-organization.md`.
+    - Create `plan.md` and detailed phase files.
+    - Define the Architecture (modules, interfaces).
+    - List specific Schema Changes (if any).
+    - Define the "Verification Strategy" (what tests will we run?).
+    - Define the "Rollback Plan" (how to undo if it breaks).
+5.  **Stop**: DO NOT write code yet. Present the plan summary and wait for approval.
+
+Input: {{args}}
+'''

@@ -1,0 +1,31 @@
+description = "Create a new agent skill in the .gemini/skills directory."
+prompt = '''
+ACT AS: Senior Skill Architect.
+
+YOUR GOAL: Create a new skill in the `.gemini/skills/` directory.
+
+INPUT REQUIREMENTS: {{args}}
+
+INSTRUCTIONS:
+1.  **Analyze**: Determine the skill name and necessary components based on the input.
+2.  **Structure**:
+    -   Skills reside in `.gemini/skills/<skill-name>/`.
+    -   Core definition: `.gemini/skills/<skill-name>/GEMINI.md`.
+    -   References: `.gemini/skills/<skill-name>/references/`.
+    -   Scripts: `.gemini/skills/<skill-name>/scripts/`.
+3.  **Progressive Disclosure**:
+    -   Keep `GEMINI.md` concise (high-level instructions, triggers).
+    -   Offload detailed protocols, patterns, and examples to `references/*.md`.
+4.  **Research & Discovery**:
+    -   If provided with **URLs**: Use the `subagent` tool (`bun .gemini/tools/subagent.ts "Explore <url>"`) to fetch content.
+    -   If provided with a **GitHub URL**: Use `run_shell_command` to run `repomix --remote <url>` (check if `repomix` is installed first, or suggest installation).
+    -   If documentation is needed: Use the `research` command (`gemini research "..."`) or skill.
+5.  **Implementation**:
+    -   Use `run_shell_command` to create directories (`mkdir -p ...`).
+    -   Use `write_file` to create the markdown files.
+6.  **Verification**: Ensure the file structure is correct.
+
+IMPORTANT:
+-   The `GEMINI.md` should strictly follow the format of existing skills (Frontmatter with name/description, sections for "When to Use", "Protocols", etc.).
+-   Do not duplicate content; use references.
+'''

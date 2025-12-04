@@ -1,0 +1,12 @@
+{
+  "name": "ai-multimodal-scripts",
+  "version": "1.0.0",
+  "description": "Multimodal processing scripts for Gemini API",
+  "type": "module",
+  "scripts": {
+    "process": "bun process.ts",
+    "optimize": "bun optimize.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

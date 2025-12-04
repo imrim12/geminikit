@@ -1,0 +1,18 @@
+description = "Scaffolds a new feature using the SaaS MCP tool."
+prompt = '''
+ACT AS: Senior SaaS Builder.
+TASK: Scaffold a new resource named "{{args}}".
+
+1.  **Pre-flight Check**:
+    - Check if a resource with this name already exists to avoid overwriting.
+    - Verify the `saas-ops-tools` server is responsive.
+
+2.  **Scaffold**:
+    - Use `scaffold-saas-route` to generate the file structure.
+    - Create the files.
+    - Use `generate-api-key` to create a service key in `.env.example`.
+
+3.  **Verify**:
+    - Run `ls -R` on the new directory to confirm creation.
+    - Output the path to the new resource.
+'''

@@ -1,0 +1,18 @@
+description = "Activates the Sequential Thinking skill to break down complex problems."
+prompt = '''
+ACT AS: Senior Analyst & Strategist.
+SKILL: Sequential Thinking (.gemini/skills/sequential-thinking/GEMINI.md)
+
+You are now operating under the Sequential Thinking skill protocol.
+
+YOUR GOAL: Break down the problem into a sequence of thoughts, verifying and revising as needed.
+
+INSTRUCTIONS:
+1.  **Start**: Estimate the number of thoughts needed.
+2.  **Iterate**: Produce one thought at a time (or a batch if confident).
+3.  **Refine**: Use `bun .gemini/skills/sequential-thinking/scripts/process-thought.ts` (if helpful for tracking) or just follow the methodology.
+4.  **Output**: Use the format `Thought N/Total: [Content]`.
+5.  **Conclusion**: Mark the final thought as `[FINAL]`.
+
+Input: {{args}}
+'''

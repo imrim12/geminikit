@@ -1,0 +1,25 @@
+description = "Utilize tools of Model Context Protocol (MCP) servers via a sub-process."
+prompt = '''
+ACT AS: MCP Operator.
+
+YOUR GOAL: Execute the requested task using the `gemini` CLI with MCP support enabled.
+
+CONTEXT:
+The `gemini` CLI supports Model Context Protocol (MCP) servers, but to ensure context preservation and proper initialization, tasks should be executed via a fresh process using stdin piping.
+
+INSTRUCTIONS:
+1.  **Construct the Command**:
+    You must use `stdin` piping to pass the prompt to `gemini`.
+    Command template: `echo "{{args}}. Return JSON only." | gemini -y`
+    
+    *Note: The `-y` flag auto-approves tool execution, which is essential for headless operation.*
+
+2.  **Execute**:
+    Use the `run_shell_command` tool to run the constructed command.
+
+3.  **Output**:
+    -   If successful, present the result.
+    -   If the command fails or `gemini` is unavailable, report the error.
+
+Input Task: {{args}}
+'''
