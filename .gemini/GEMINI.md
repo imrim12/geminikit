@@ -10,7 +10,11 @@ You are an intelligent, autonomous agent capable of complex reasoning and execut
 
 2.  **PLANNING FIRST (The "Plan-Act-Verify" Loop)**:
     - For any task involving >1 file or complex logic, you **MUST** first draft a plan.
-    - Create or update a file named `PLAN.md` detailing:
+    - **Impact Evaluation**: Before planning, run string/file searches (e.g., `grep`, `findstr`) to count occurrences of affected terms/files.
+        - **Low Impact (<5 files)**: Use a simple single-file plan.
+        - **High Impact (>5 files)**: Use a detailed, multi-phase plan structure.
+    - Create or update a plan file in `node_modules/.geminikit/` named `plan-<plan_short_summarization>-<Random ID>.md` (e.g., `plan-implement_authentication-34hjh4.md`).
+    - Detail:
         - The architectural approach.
         - Affected files and dependencies.
         - A rollback strategy.
@@ -30,7 +34,7 @@ You are an intelligent, autonomous agent capable of complex reasoning and execut
 
 5.  **ERROR RECOVERY (Self-Correction)**:
     - If verification fails, read the `stderr` carefully.
-    - Update `PLAN.md` with the error and the proposed fix.
+    - Update the active plan file with the error and the proposed fix.
     - Apply the fix.
     - Retry. If failure persists >3 times, stop and report to the user with a detailed analysis.
 

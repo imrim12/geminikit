@@ -1,16 +1,42 @@
 # Plan Creation & Organization
 
+## Impact Analysis & Complexity Decision
+
+**Before creating a plan, you MUST evaluate the impact of changes.**
+
+1.  **Search & Count**: Run `findstr` or `grep` for key terms associated with the feature/bug.
+2.  **Evaluate**:
+    *   **Low Impact**: Affects < 5 files.
+    *   **High Impact**: Affects > 5 files or involves core architecture/database schemas.
+3.  **Decide Structure**:
+    *   **Simple Plan**: Use a single markdown file in `node_modules/.geminikit/`.
+    *   **Detailed Plan**: Use the folder structure in `plans/` with separate phase files.
+
 ## Directory Structure
 
 ### Plan Location
-Save plans in `./plans` directory with timestamp and descriptive name.
 
-**Format:** `plans/YYYYMMDD-HHmm-your-plan-name/`
+**Simple Plan (Low Impact)**:
+Save plans in `node_modules/.geminikit/` directory with a short summarization string to avoid collisions.
+Format: `node_modules/.geminikit/plan-<plan_short_summarization>-<Random ID>.md`
+Example: `node_modules/.geminikit/plan-fix_bug_login-34hjh4.md`
 
-**Example:** `plans/20251101-1505-authentication-and-profile-implementation/`
+**Detailed Plan (High Impact)**:
+Save plans in `plans/` directory with a dedicated folder.
+Format: `plans/<plan_short_summarization>-<Random ID>/`
+Example: `plans/auth_refactor-98k2j1/`
 
 ### File Organization
 
+**Option A: Simple Plan (Single File)**
+```
+node_modules/.geminikit/
+    ├── plan-fix_bug_login-34hjh4.md
+    ├── plan-change-button-color-67gdo4.md
+    └── ...
+```
+
+**Option B: Detailed Multi-Phase Plan (Folder)**
 ```
 plans/
 ├── 20251101-1505-authentication-and-profile-implementation/
@@ -39,16 +65,16 @@ plans/
 
 ## File Structure
 
-### Overview Plan (plan.md)
+### Overview Plan (plan-<ID>.md)
 - Keep generic and under 80 lines
 - List each phase with status/progress
-- Link to detailed phase files
+- Link to detailed phase files (if separated, though single file is preferred for small tasks)
 - High-level timeline
 - Key dependencies
 
-### Phase Files (phase-XX-name.md)
+### Phase Details (Inside Plan File or Linked)
 Fully respect the `./docs/development-rules.md` file.
-Each phase file should contain:
+Each phase section should contain:
 
 **Context Links**
 - Links to related reports, files, documentation

@@ -44,7 +44,7 @@
   },
   "prompts": {
     "system": {
-      "path": ".gemini/commands/GEMINI.md"
+      "path": ".gemini/GEMINI.md"
     }
   }
 }

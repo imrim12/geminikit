@@ -31,8 +31,9 @@ Load: `references/research-phase.md`
 Load: `references/codebase-understanding.md`
 **Skip if:** Provided with scout reports
 
-### 3. Solution Design
+### 3. Impact & Solution Design
 Load: `references/solution-design.md`
+**Action:** Run impact analysis (grep/findstr) to determine plan complexity.
 
 ### 4. Plan Creation & Organization
 Load: `references/plan-organization.md`
@@ -43,11 +44,12 @@ Load: `references/output-standards.md`
 ## Workflow Process
 
 1. **Initial Analysis** → Read codebase docs, understand context
-2. **Research Phase** → Spawn researchers, investigate approaches
-3. **Synthesis** → Analyze reports, identify optimal solution
-4. **Design Phase** → Create architecture, implementation design
-5. **Plan Documentation** → Write comprehensive plan
-6. **Review & Refine** → Ensure completeness, clarity, actionability
+2. **Impact Assessment** → **Run searches to quantify impact (Count files/lines). Decide: Simple vs Detailed Plan.**
+3. **Research Phase** → Spawn researchers, investigate approaches
+4. **Synthesis** → Analyze reports, identify optimal solution
+5. **Design Phase** → Create architecture, implementation design
+6. **Plan Documentation** → Write comprehensive plan (Single file or Multi-phase)
+7. **Review & Refine** → Ensure completeness, clarity, actionability
 
 ## Output Requirements
 
@@ -59,9 +61,18 @@ Load: `references/output-standards.md`
 - Fully respect the `./docs/development-rules.md` file.
 
 **Plan Directory Structure**
+
+Short plan (Low Impact):
+```
+node_modules/.geminikit/
+    ├── plan-<plan_short_summarization>-<Random ID>.md
+    ├── ...
+```
+
+Detailed, multi-phase plan (High Impact):
 ```
 plans/
-└── YYYYMMDD-HHmm-plan-name/
+└── <plan_short_summarization>-<Random ID>/
     ├── research/
     │   ├── researcher-XX-report.md
     │   └── ...
