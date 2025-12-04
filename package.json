@@ -10,9 +10,7 @@
     "scripts/postinstall.js"
   ],
   "workspaces": [
-    ".gemini/extensions/*",
-    ".gemini/skills/*/scripts",
-    ".gemini/skills/sequential-thinking"
+    ".gemini/**"
   ],
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

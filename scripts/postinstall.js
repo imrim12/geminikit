@@ -11,7 +11,7 @@ const sourceDir = path.join(__dirname, '../.gemini');
 const destRoot = process.env.INIT_CWD || path.resolve(__dirname, '../../../'); 
 const destDir = path.join(destRoot, '.gemini');
 
-console.log(`[geminikit] Copying configuration from ${sourceDir} to ${destDir}...`);
+console.log(`[geminikit] Linking configuration from ${sourceDir} to ${destDir}...`);
 
 if (!fs.existsSync(sourceDir)) {
   console.error('[geminikit] Error: Source .gemini folder not found! This might be a local install issue.');
@@ -26,8 +26,8 @@ if (path.resolve(sourceDir) === path.resolve(destDir)) {
   process.exit(0);
 }
 
-// Function to copy recursively
-function copyRecursiveSync(src, dest) {
+// Function to link recursively
+function linkRecursiveSync(src, dest) {
   const exists = fs.existsSync(src);
   const stats = exists && fs.statSync(src);
   const isDirectory = exists && stats.isDirectory();
@@ -37,20 +37,31 @@ function copyRecursiveSync(src, dest) {
       fs.mkdirSync(dest, { recursive: true });
     }
     fs.readdirSync(src).forEach((childItemName) => {
-      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+      linkRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
     });
   } else {
-    // Don't overwrite if file exists? Or overwrite?
-    // "configure this workspace" implies setting it up. Overwriting ensures the latest kit is applied.
-    // But user might have custom settings. 
-    // For now, we overwrite to ensure the "kit" distribution works as intended.
-    fs.copyFileSync(src, dest);
+    // Skip if file exists (User requirement: not overriding)
+    if (fs.existsSync(dest)) {
+      return;
+    }
+    
+    try {
+      // Create hard link to save space and maintain source of truth
+      fs.linkSync(src, dest);
+    } catch (err) {
+      console.warn(`[geminikit] Warning: Failed to link ${path.basename(src)}. Falling back to copy. Error: ${err.message}`);
+      try {
+        fs.copyFileSync(src, dest);
+      } catch (copyErr) {
+        console.error(`[geminikit] Error: Failed to copy ${path.basename(src)}: ${copyErr.message}`);
+      }
+    }
   }
 }
 
 try {
-  copyRecursiveSync(sourceDir, destDir);
+  linkRecursiveSync(sourceDir, destDir);
   console.log('[geminikit] Successfully configured .gemini workspace.');
 } catch (err) {
-  console.error('[geminikit] Failed to copy configuration:', err);
+  console.error('[geminikit] Failed to link configuration:', err);
 }
