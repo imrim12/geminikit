@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+bun.lock
+bun.lockb
+
+# Testing
+coverage
+__tests__
+*.test.ts
+*.spec.ts
+*.test.js
+*.spec.js
+
+# Editor & System directories
+.DS_Store
+.idea
+.vscode
+*.swp
+*.swo
+.editorconfig
+.git
+.gitignore
+
+# Build & Config
+tsconfig.json
+tsconfig.tsbuildinfo
+.eslintrc*
+.prettierrc*
+
+# Gemini Specific
+.gemini/tmp
