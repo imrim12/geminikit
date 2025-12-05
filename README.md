@@ -95,7 +95,7 @@ After creating the folder, you may need to re-run `npx gk setup` or manually cop
 
 #### Troubleshooting: pnpm and `gk` command
 
-When using `pnpm`, you might encounter issues where the `gk` command (from `@thecodeorigin/geminikit-cli`) is not automatically registered in your path, or its peer dependencies are not correctly linked. This is often due to `pnpm`'s strict linking model.
+When using `pnpm`, you might encounter issues where the `gk` command is not automatically registered in your path, or its peer dependencies are not correctly linked. This is often due to `pnpm`'s strict linking model.
 
 To ensure `gk` works as expected, add the following lines to your project's `.npmrc` file (create it if it doesn't exist):
 
@@ -106,10 +106,10 @@ auto-install-peers=true
 
 These settings tell `pnpm` to hoist dependencies similarly to `npm` and `yarn` (allowing direct access to hoisted packages) and to automatically install peer dependencies. After modifying `.npmrc`, run `pnpm install` again.
 
-Alternatively, if you prefer not to modify `.npmrc` globally or per-project, you can manually install `@thecodeorigin/geminikit-cli`:
+Alternatively, if you prefer not to modify `.npmrc` globally or per-project, you can manually install `geminikit`:
 
 ```bash
-pnpm install -g @thecodeorigin/geminikit-cli
+pnpm install -g geminikit
 ```
 This ensures the `gk` command is available globally.
 
