@@ -8,13 +8,13 @@
         "@modelcontextprotocol/sdk": "^1.0.1",
         "debug": "^4.4.0",
         "dotenv": "^16.4.5",
+        "geminikit-cli": "workspace:*",
         "mime-types": "^2.1.35",
         "puppeteer": "^24.15.0",
         "yargs": "^17.7.2",
         "zod": "^3.23.8",
       },
       "devDependencies": {
-        "@thecodeorigin/geminikit-cli": "workspace:*",
         "@types/debug": "^4.1.12",
         "@types/mime-types": "^2.1.4",
         "@types/node": "^22.0.0",
@@ -24,7 +24,7 @@
       },
     },
     "packages/cli": {
-      "name": "@thecodeorigin/geminikit-cli",
+      "name": "geminikit-cli",
       "version": "0.0.1",
       "bin": {
         "gk": "dist/index.js",
@@ -41,6 +41,10 @@
         "typescript": "^5.5.0",
       },
     },
+    "packages/pro": {
+      "name": "@thecodeorigin/geminikit-pro",
+      "version": "0.0.1",
+    },
   },
   "packages": {
     "@babel/code-frame": ["@babel/code-frame@7.27.1", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],
@@ -53,7 +57,7 @@
 
     "@puppeteer/browsers": ["@puppeteer/browsers@2.11.0", "", { "dependencies": { "debug": "^4.4.3", "extract-zip": "^2.0.1", "progress": "^2.0.3", "proxy-agent": "^6.5.0", "semver": "^7.7.3", "tar-fs": "^3.1.1", "yargs": "^17.7.2" }, "bin": { "browsers": "lib/cjs/main-cli.js" } }, "sha512-n6oQX6mYkG8TRPuPXmbPidkUbsSRalhmaaVAQxvH1IkQy63cwsH+kOjB3e4cpCDHg0aSvsiX9bQ4s2VB6mGWUQ=="],
 
-    "@thecodeorigin/geminikit-cli": ["@thecodeorigin/geminikit-cli@workspace:packages/cli"],
+    "@thecodeorigin/geminikit-pro": ["@thecodeorigin/geminikit-pro@workspace:packages/pro"],
 
     "@tootallnate/quickjs-emscripten": ["@tootallnate/quickjs-emscripten@0.23.0", "", {}, "sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA=="],
 
@@ -212,6 +216,8 @@
     "fresh": ["fresh@2.0.0", "", {}, "sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A=="],
 
     "function-bind": ["function-bind@1.1.2", "", {}, "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="],
+
+    "geminikit-cli": ["geminikit-cli@workspace:packages/cli"],
 
     "get-caller-file": ["get-caller-file@2.0.5", "", {}, "sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg=="],
 

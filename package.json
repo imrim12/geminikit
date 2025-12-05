@@ -15,7 +15,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "@thecodeorigin/geminikit-cli": "workspace:*",
+    "geminikit-cli": "workspace:*",
     "@google/generative-ai": "^0.24.1",
     "@modelcontextprotocol/sdk": "^1.0.1",
     "debug": "^4.4.0",
