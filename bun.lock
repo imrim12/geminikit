@@ -6,7 +6,7 @@
       "dependencies": {
         "@google/generative-ai": "^0.24.1",
         "@modelcontextprotocol/sdk": "^1.0.1",
-        "@thecodeorigin/geminikit-cli": "workspace:*",
+        "@thecodeorigin/geminikit-cli": "^0.0.1",
         "debug": "^4.4.0",
         "dotenv": "^16.4.5",
         "mime-types": "^2.1.35",
