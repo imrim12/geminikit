@@ -1,10 +1,12 @@
 {
   "name": "geminikit",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Gemini CLI Workspace Kit",
   "private": false,
   "files": [
-    ".gemini"
+    ".gemini",
+    "LICENSE",
+    "README.md"
   ],
   "workspaces": [
     ".gemini/**",
