@@ -40,7 +40,7 @@ Create and manage Slidev presentations. This skill enforces a rigorous "Think-Pl
 
 ### 3. Content Engineering (Research & Flow)
 **Use the best model context available.**
-1.  **Deep Research**: Perform online research for *each* selected headline to gather facts, benchmarks, and current data.
+1.  **Parallel Deep Research**: Perform online research for *each* selected headline to gather facts, benchmarks, and current data by spawning multiple research `subagents`.
 2.  **Elaborate Narrative**: Expand the original prompt into a full narrative. Do not settle for simple bullets.
 3.  **"Click-and-Tell" Pattern**:
     -   Design for *speaking*, not reading.
