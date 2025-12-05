@@ -7,11 +7,35 @@ interface CheckResult {
   details?: string;
 }
 
-function checkGeminiKitVersion(): CheckResult {
+function checkGeminiKitCLIVersion(): CheckResult {
   try {
     const packageJsonPath = join(__dirname, '..', 'package.json');
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
     return { passed: true, details: `(${packageJson.version})` };
+  } catch (e) {
+    return { passed: false };
+  }
+}
+
+function checkGeminiKitVersion(): CheckResult {
+  try {
+    // Check if we are in the root of the geminikit repo
+    const cwdPackageJsonPath = join(process.cwd(), 'package.json');
+    if (existsSync(cwdPackageJsonPath)) {
+        const pkg = JSON.parse(readFileSync(cwdPackageJsonPath, 'utf-8'));
+        if (pkg.name === 'geminikit') {
+            return { passed: true, details: `(${pkg.version})` };
+        }
+    }
+
+    // Check if geminikit is installed in node_modules
+    const nodeModulesPath = join(process.cwd(), 'node_modules', 'geminikit', 'package.json');
+    if (existsSync(nodeModulesPath)) {
+        const pkg = JSON.parse(readFileSync(nodeModulesPath, 'utf-8'));
+        return { passed: true, details: `(${pkg.version})` };
+    }
+
+    return { passed: false, details: '(Not found)' };
   } catch (e) {
     return { passed: false };
   }
@@ -51,10 +75,11 @@ export function runDoctor() {
   console.log('Gemini Kit Doctor 🩺\n');
 
   const checks = [
-    { name: 'Gemini Kit Installed', check: checkGeminiKitVersion },
-    { name: 'Bun Installed', check: checkBun },
-    { name: 'Gemini CLI Installed', check: checkGeminiCLI },
-    { name: 'Gemini Configured (.gemini)', check: checkGeminiConfig },
+    { name: 'Gemini Kit Version', check: checkGeminiKitVersion },
+    { name: 'Gemini Kit CLI Version', check: checkGeminiKitCLIVersion },
+    { name: 'Bun Installation', check: checkBun },
+    { name: 'Gemini CLI Installation', check: checkGeminiCLI },
+    { name: 'Gemini Configuration (.gemini)', check: checkGeminiConfig },
   ];
 
   let allPassed = true;
