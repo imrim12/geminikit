@@ -1,6 +1,6 @@
 {
   "name": "geminikit",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Gemini CLI Workspace Kit",
   "private": false,
   "files": [
@@ -13,7 +13,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@modelcontextprotocol/sdk": "^1.0.1",
-    "@thecodeorigin/geminikit-cli": "^0.0.1",
+    "@thecodeorigin/geminikit-cli": "^0.0.2",
     "debug": "^4.4.0",
     "dotenv": "^16.4.5",
     "mime-types": "^2.1.35",
