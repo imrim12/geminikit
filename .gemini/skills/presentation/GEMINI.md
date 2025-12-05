@@ -1,86 +1,82 @@
 ---
 name: presentation
-description: Create professional, developer-friendly presentations using Slidev. Converts Markdown to beautiful HTML slides with theming capabilities. Requires `frontend-design` for theme definition.
+description: Create professional, developer-friendly presentations using Slidev. Converts Markdown to beautiful HTML slides with theming capabilities. Includes strict protocols for planning, research, narrative pacing (Click-and-Tell), and mandatory verification.
 ---
 
 # Presentation Skill (Slidev)
 
-Create and manage Slidev presentations. This skill handles scaffolding, content generation, theme development, and **mandatory verification**.
+Create and manage Slidev presentations. This skill enforces a rigorous "Think-Plan-Act" cycle to ensure presentations are tailored, well-researched, and impactful.
 
 ## Prerequisites
 
 - **Node.js** >= 18.0.0
-- **Runtime**: `bun` (Strictly preferred for speed and dependency resolution)
+- **Runtime**: `bun` (Strictly preferred)
 - **Skill Dependency**: `frontend-design` (Required for custom themes)
 
 ## When to Use
 
 - Creating technical presentations from Markdown.
 - Building reusable slide themes.
-- Exporting slides to PDF/SPA.
 - When the user asks for "slides", "presentation", or "deck".
 
 ## Protocols
 
-### 1. Initialization (New Project)
-1.  **Check Environment**: Verify Node.js version.
-2.  **Scaffold**: 
-    - **Preferred**: Run `bun create slidev <project-name>` (if interactive).
-    - **Agent Mode**: If running autonomously without user input capability, **manually scaffold** the project with the **LATEST** flat structure to avoid complexity.
-    - *Modern Flat Structure*:
+### 1. Discovery & Analysis (Context First)
+**Before any code**, you must understand the "Where" and "Who".
+1.  **Identify Context**: Analyze the request for event names, branding (e.g., Google DevFest, Company All-Hands), and target audience.
+2.  **Determine Theme**: Select a visual direction (e.g., Neobrutalism, Minimalist, Corporate) based on the event's vibe.
+3.  **Ask the User**:
+    -   *"What is the duration of the talk?"*
+4.  **Estimate Scale**:
+    -   Suggest a slide count based on duration.
+    -   *Rule of Thumb*: 1 slide per minute for standard content, but **3-5 slides per minute** for "Click-and-Tell" (see below).
+
+### 2. Strategic Planning (The Blueprint)
+**Do not start writing slides yet.**
+1.  **Generate Structure**: Outline the main sections/arcs of the talk.
+2.  **Headline Options**: For **EACH** main section, generate **3 distinct headline options** (e.g., Descriptive, Provocative, Abstract).
+3.  **User Selection**: Present these options and **ASK** the user to choose manually.
+4.  **Lock Plan**: Confirm the final outline.
+
+### 3. Content Engineering (Research & Flow)
+**Use the best model context available.**
+1.  **Deep Research**: Perform online research for *each* selected headline to gather facts, benchmarks, and current data.
+2.  **Elaborate Narrative**: Expand the original prompt into a full narrative. Do not settle for simple bullets.
+3.  **"Click-and-Tell" Pattern**:
+    -   Design for *speaking*, not reading.
+    -   **Impact Bursting**: Identify strong, inspirational sentences (e.g., "WE MUST ACT NOW").
+    -   **Split Slides**: Create a sequence of 4-5 rapid slides for these sentences (One word/phrase per slide) to control the speaker's pacing and impact.
+    -   *Example*: Slide A: "WE" -> Slide B: "MUST" -> Slide C: "ACT" -> Slide D: "NOW!!!" (Big Typography).
+
+### 4. Implementation (Slidev)
+1.  **Scaffold**: 
+    -   If interactive: `bun create slidev <project-name>`.
+    -   If autonomous: Manually create the **Flat Structure** (see below).
+    -   *Structure*:
         ```
         <project-name>/
         ├── slides.md           # Main entry
-        ├── package.json        # Latest @slidev/cli, @slidev/theme-default, vue
+        ├── package.json        # @slidev/cli, @slidev/theme-default, vue
         ├── uno.config.ts       # UnoCSS Config (Critical for theming)
-        ├── style.css           # Global styles (Imported in slides.md)
+        ├── style.css           # Global styles
         ├── components/         # Custom Vue components
         └── public/             # Static assets
         ```
-3.  **Install Dependencies**: 
-    - **Command**: `bun install`
-    - **Rule**: Never assume dependencies are present. Always install immediately after scaffolding.
+2.  **Theme Integration**:
+    -   Use `frontend-design` principles in `uno.config.ts`.
+    -   Define fonts as **strings** (e.g., `fontFamily: { sans: '"Roboto", sans-serif' }`).
+3.  **Install**: `bun install` immediately.
 
-### 2. Theme Development (Custom Look)
-**CRITICAL STEP**: You MUST use/simulate the `frontend-design` skill first to define the design system.
-
-1.  **Design Phase**:
-    -   Invoke `frontend-design` to generate a "Design System Specification".
-2.  **Implementation**:
-    -   Create `style.css` for global overrides (e.g., fonts, root variables).
-    -   Configure `uno.config.ts` for utility classes and design tokens.
-    -   **Important**: In `uno.config.ts`, define fonts as **strings**, not arrays, to avoid Vite build errors.
-        -   ✅ `fontFamily: { sans: '"Roboto", sans-serif' }`
-        -   ❌ `fontFamily: { sans: ['Roboto', 'sans-serif'] }`
-
-### 3. Content Generation
-1.  **Markdown Structure**:
-    -   Use `---` separator for slides.
-    -   Use Frontmatter for slide configuration (`layout`, `background`, `class`).
-    -   Import global styles in the first slide:
-        ```html
-        <!-- slides.md -->
-        <style>
-        @import './style.css';
-        </style>
-        ```
-
-### 4. Verification (MANDATORY)
-Vite loads modules lazily, meaning runtime errors often hide until specific slides are accessed. To ensure the project is valid:
-
-1.  **Run Build**: Execute `bun run build`.
-    -   This forces a full compilation of all assets, fonts, and styles.
-    -   It is the **only** way for a headless agent to verify the project works without a browser.
-2.  **Fix Errors**: If the build fails (e.g., "fontFamily not found", "missing module"):
-    -   Read the error log.
-    -   Adjust `uno.config.ts` or `package.json`.
-    -   **Retry** `bun run build` until successful.
-3.  **Do NOT** simply run `dev` and assume it works. `dev` starts fast but crashes later. `build` proves correctness.
+### 5. Verification (MANDATORY)
+**Runtime errors are lazy. Build to prove correctness.**
+1.  **Execute**: `bun run build`.
+2.  **Analyze**: If it fails (fonts, missing modules), FIX IT and RETRY.
+3.  **Sign-off**: Only claim success after a clean build.
 
 ## Key Commands
 
 - `bun install`: Install dependencies.
-- `bun run dev`: Start dev server (User use).
+- `bun run dev`: Start dev server.
 - `bun run build`: **Agent Verification Command**.
 - `bun run export`: Export to PDF.
 
