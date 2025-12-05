@@ -1,13 +1,20 @@
 {
   "name": "geminikit",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Gemini CLI Workspace Kit",
   "private": false,
   "files": [
     ".gemini",
+    "dist",
     "LICENSE",
     "README.md"
   ],
+  "bin": {
+    "gk": "dist/index.js"
+  },
+  "scripts": {
+    "prepack": "bun run -F @thecodeorigin/geminikit-cli prepack"
+  },
   "workspaces": [
     ".gemini/**",
     "packages/*"
@@ -15,7 +22,6 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@modelcontextprotocol/sdk": "^1.0.1",
-    "@thecodeorigin/geminikit-cli": "^0.0.2",
     "debug": "^4.4.0",
     "dotenv": "^16.4.5",
     "mime-types": "^2.1.35",

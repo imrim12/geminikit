@@ -21,7 +21,6 @@
     ]
   },
   "include": [
-    ".gemini/**/*",
-    "scripts/**/*"
+    ".gemini/**/*"
   ]
 }

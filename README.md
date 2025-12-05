@@ -31,6 +31,8 @@ To use this kit in your project:
 bun add geminikit
 # or
 npm install geminikit
+# or
+pnpm add geminikit
 ```
 
 After installation, run the setup command to configure the `.gemini` environment:
@@ -38,6 +40,78 @@ After installation, run the setup command to configure the `.gemini` environment
 ```bash
 npx gk setup
 ```
+
+### Manual Installation & Troubleshooting
+
+#### Manual Installation
+
+If `npx gk setup` encounters issues, you might need to install `Bun.sh` and the `Gemini CLI` manually.
+
+##### Install Bun.sh
+
+Follow the official Bun.sh installation guide for your operating system:
+*   **Windows**:
+    ```bash
+    powershell -c "irm bun.sh/install.ps1 | iex"
+    ```
+    Alternatively, you can use `npm`:
+    ```bash
+    npm install -g bun
+    # or
+    pnpm install -g bun
+    ```
+*   **macOS / Linux**:
+    ```bash
+    curl -fsSL https://bun.sh/install | bash
+    ```
+
+After installation, verify `bun` is installed by running:
+```bash
+bun --version
+```
+
+##### Install Gemini CLI
+
+```bash
+npm install -g @google/generative-ai-cli
+# or
+pnpm install -g @google/generative-ai-cli
+```
+Verify `gemini` is installed by running:
+```bash
+gemini --version
+```
+
+#### Troubleshooting: Telemetry `.gemini` folder
+
+The `npx gk setup` command is designed to create the `node_modules/.gemini` folder, which is crucial for telemetry and skill management. If, for any reason, this folder is not created automatically, you can create it manually:
+
+```bash
+mkdir -p node_modules/.gemini
+```
+(Note: `mkdir -p` works on Linux/macOS. For Windows, `mkdir node_modules\.gemini` or `New-Item -ItemType Directory -Force -Path "node_modules/.gemini"`)
+
+After creating the folder, you may need to re-run `npx gk setup` or manually copy the necessary skill files if they are missing.
+
+#### Troubleshooting: pnpm and `gk` command
+
+When using `pnpm`, you might encounter issues where the `gk` command (from `@thecodeorigin/geminikit-cli`) is not automatically registered in your path, or its peer dependencies are not correctly linked. This is often due to `pnpm`'s strict linking model.
+
+To ensure `gk` works as expected, add the following lines to your project's `.npmrc` file (create it if it doesn't exist):
+
+```
+shamefully-hoist=true
+auto-install-peers=true
+```
+
+These settings tell `pnpm` to hoist dependencies similarly to `npm` and `yarn` (allowing direct access to hoisted packages) and to automatically install peer dependencies. After modifying `.npmrc`, run `pnpm install` again.
+
+Alternatively, if you prefer not to modify `.npmrc` globally or per-project, you can manually install `@thecodeorigin/geminikit-cli`:
+
+```bash
+pnpm install -g @thecodeorigin/geminikit-cli
+```
+This ensures the `gk` command is available globally.
 
 ## GeminiKit CLI (`gk`)
 

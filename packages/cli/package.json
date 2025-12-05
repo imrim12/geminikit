@@ -2,13 +2,9 @@
   "name": "@thecodeorigin/geminikit-cli",
   "version": "0.0.2",
   "description": "Gemini CLI Wrapper",
-  "main": "dist/index.js",
-  "private": false,
-  "bin": {
-    "gk": "dist/index.js"
-  },
+  "private": true,
   "scripts": {
-    "build": "tsc"
+    "prepack": "tsc"
   },
   "dependencies": {
     "yargs": "^17.7.2",
