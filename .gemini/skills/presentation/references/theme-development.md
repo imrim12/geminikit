@@ -10,25 +10,21 @@ Before coding, you **MUST** define the design system. Use the `frontend-design` 
 
 ## Theme Structure
 
-A theme is typically a directory (local) or an npm package.
+For simple, single-project presentations, prefer a **Flat Structure**.
 
 ```
-theme/
-├── layouts/          # Vue components for layouts
-│   ├── cover.vue
-│   ├── default.vue
-│   └── ...
-├── styles/           # Global CSS
-│   ├── index.css     # Main entry
-│   └── layouts.css   # Layout specific styles
-├── components/       # Custom components
+<project-root>/
+├── slides.md
+├── style.css         # Global styles
 ├── uno.config.ts     # UnoCSS configuration
-└── package.json
+└── components/       # Custom components
 ```
 
 ## Implementing Design Tokens (UnoCSS)
 
 Map the `frontend-design` tokens to `uno.config.ts`.
+
+**CRITICAL**: Define fonts as **strings**, not arrays.
 
 ```ts
 // uno.config.ts
@@ -41,65 +37,58 @@ export default defineConfig({
       secondary: '#10B981',
     },
     fontFamily: {
-      sans: 'Inter, sans-serif',
-      mono: 'Fira Code, monospace',
+      // Correct: String with quotes for font names with spaces
+      sans: '"Inter", sans-serif',
+      mono: '"Fira Code", monospace',
+      
+      // INCORRECT: Do NOT use arrays
+      // sans: ['Inter', 'sans-serif'], 
     },
   },
 })
 ```
 
+## Global Styling (`style.css`)
+
+Import this file in your `slides.md` using a `<style>` block.
+
+```css
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+:root {
+  --slidev-theme-primary: #3B82F6;
+  --slidev-theme-bg: #ffffff;
+  --slidev-code-bg: #1e1e1e;
+}
+
+.slidev-layout {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--slidev-theme-bg);
+}
+
+/* Custom classes */
+.my-card {
+  @apply p-4 border border-gray-200 rounded shadow;
+}
+```
+
 ## Layouts
 
-Create Vue components in `layouts/`. `default.vue` is required.
-
-### Example: `layouts/default.vue`
+If you need custom Vue layouts, create them in a `layouts/` folder and referenced them in frontmatter.
 
 ```vue
+<!-- layouts/my-layout.vue -->
 <template>
-  <div class="slidev-layout default">
+  <div class="slidev-layout my-layout">
     <slot />
   </div>
 </template>
-
-<style>
-.slidev-layout.default {
-  @apply h-full w-full bg-white text-black p-10;
-}
-</style>
 ```
 
-### Example: `layouts/cover.vue`
-
-```vue
-<template>
-  <div class="slidev-layout cover h-full flex flex-col justify-center items-center bg-primary text-white">
-    <div class="text-6xl font-bold">
-      <slot name="default" /> <!-- Renders H1 -->
-    </div>
-    <div class="text-2xl opacity-75 mt-4">
-      <slot name="subtitle" />
-    </div>
-  </div>
-</template>
-```
-
-## Styling Classes
-
-Adhere to standard Slidev classes for compatibility:
-- `.slidev-layout`: Root class for all layouts.
-- `.slidev-code-wrapper`: Wrapper for code blocks.
-- `.slidev-icon-btn`: For buttons/icons.
-
-## Overriding Styles
-Put global overrides in `styles/index.css`.
-
-```css
-/* styles/index.css */
-:root {
-  --slidev-code-background: #1e1e1e;
-}
-
-.slidev-layout h1 {
-  @apply text-4xl font-bold text-primary mb-4;
-}
+Usage:
+```markdown
+---
+layout: my-layout
+---
 ```
