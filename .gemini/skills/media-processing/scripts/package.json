@@ -1,0 +1,18 @@
+{
+  "name": "media-processing-scripts",
+  "version": "1.0.0",
+  "description": "Media processing scripts for Gemini Media Processing Skill",
+  "type": "module",
+  "scripts": {
+    "convert": "bun convert.ts",
+    "optimize": "bun optimize.ts",
+    "resize": "bun resize.ts"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.32",
+    "@types/node": "^20.0.0"
+  }
+}

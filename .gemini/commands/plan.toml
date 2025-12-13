@@ -14,7 +14,7 @@ INSTRUCTIONS:
     - Run searches (e.g., `findstr`, `grep`) to quantify the impact of changes.
     - Count affected files/lines.
     - DECISION: If impact is high (>5 files), mandate a multi-phase plan. If low, a single file is sufficient.
-4.  **Research**: If needed, use `google_web_search` or spawn a researcher subagent (`bun .gemini/tools/subagent.ts "Research ..."`) to investigate unknowns.
+4.  **Research**: If needed, use `google_web_search` or spawn a researcher subagent ("Research ...") to investigate unknowns.
 5.  **Plan Generation**:
     - Ensure the directory `node_modules/.geminikit/` exists.
     - Generate a short summarization and a random id string (e.g., `fix_bug_login` and `34hjh4`) for the plan name.

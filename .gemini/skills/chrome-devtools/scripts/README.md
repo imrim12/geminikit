@@ -53,7 +53,7 @@ bun screenshot.ts --output screenshot.png [--url https://example.com] [--full-pa
 
 **Automatic Compression**: Screenshots >5MB are automatically compressed using ImageMagick to ensure compatibility with Gemini API and Claude Code. Install ImageMagick for this feature:
 - macOS: `brew install imagemagick`
-- Linux: `sudo apt-get install imagemagick`
+- Linux: `sudo apt-get install -y imagemagick`
 
 Options:
 - `--max-size N` - Custom size threshold in MB (default: 5)

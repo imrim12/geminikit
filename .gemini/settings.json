@@ -6,11 +6,16 @@
       "write_file",
       "google_web_search",
       "save_memory"
-    ]
+    ],
+    "shell": {
+      "showColor": true
+    }
   },
   "mcpServers": {},
   "ui": {
-    "theme": "dark"
+    "theme": "dark",
+    "showMemoryUsage": true,
+    "showCitations": true
   },
   "approvalMode": "always",
   "context": {
@@ -36,6 +41,19 @@
     "target": "local",
     "otlpEndpoint": "",
     "outfile": "./node_modules/.gemini/verbose.log",
-    "logPrompts": true 
+    "logPrompts": true
+  },
+  "general": {
+    "previewFeatures": true
+  },
+  "experimental": {
+    "enableAgents": true,
+    "codebaseInvestigatorSettings": {
+      "maxNumTurns": 1000,
+      "maxTimeMinutes": 5
+    }
+  },
+  "model": {
+    "compressionThreshold": 0.7
   }
 }

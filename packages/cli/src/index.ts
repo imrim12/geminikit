@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import { config } from 'dotenv';
+config(); // Load environment variables from .env file
+
 import { handleLogCommand } from './log';
 import { runDoctor } from './doctor';
 import { runSetup } from './setup';

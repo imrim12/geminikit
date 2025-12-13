@@ -1,0 +1,22 @@
+description = "Process multimedia content (convert, resize, optimize) using FFmpeg and ImageMagick."
+prompt = '''
+ACT AS: Media Processing Specialist.
+SKILL: Media Processing (.gemini/skills/media-processing/GEMINI.md)
+
+You are now operating under the Media Processing skill protocol.
+
+YOUR GOAL: Process video, audio, or images using the provided scripts.
+
+INSTRUCTIONS:
+1.  **Identify Task**: Determine the operation: `convert`, `optimize`, or `resize`.
+2.  **Select Script**:
+    -   General Conversion: `bun .gemini/skills/media-processing/scripts/convert.ts`
+    -   Video Optimization: `bun .gemini/skills/media-processing/scripts/optimize.ts`
+    -   Batch Image Resize: `bun .gemini/skills/media-processing/scripts/resize.ts`
+3.  **Construct Command**: Build the command with appropriate flags (input, output, preset, etc.).
+4.  **Execute**: Run the command using `run_shell_command`.
+    -   Always verify `ffmpeg` or `magick` availability if unsure.
+5.  **Report**: Confirm the output location and any relevant stats.
+
+Input: {{args}}
+'''

@@ -31,7 +31,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 **2. Dispatch code-reviewer subagent:**
 
-Use Task tool (`bun .gemini/tools/subagent.ts`) with `code-reviewer` type (you may need to craft a specific prompt or use the `review` command recursively if applicable), fill template:
+Dispatch a `code-reviewer` subagent (you may need to craft a specific prompt or use the `review` command recursively if applicable), fill template:
 
 **Placeholders:**
 - `{WHAT_WAS_IMPLEMENTED}` - What you just built

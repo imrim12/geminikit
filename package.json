@@ -1,6 +1,6 @@
 {
   "name": "geminikit",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "description": "Gemini CLI Workspace Kit",
   "private": false,
   "files": [
@@ -20,6 +20,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@google-cloud/vertexai": "^1.10.0",
     "@google/generative-ai": "^0.24.1",
     "@modelcontextprotocol/sdk": "^1.0.1",
     "debug": "^4.4.0",

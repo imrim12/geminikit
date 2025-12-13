@@ -45,7 +45,7 @@ brew install imagemagick
 
 **Ubuntu/Debian/WSL:**
 ```bash
-sudo apt-get install imagemagick
+sudo apt-get install -y imagemagick
 ```
 
 **Verify:**

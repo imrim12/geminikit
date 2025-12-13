@@ -17,7 +17,7 @@ INSTRUCTIONS:
     -   Keep `GEMINI.md` concise (high-level instructions, triggers).
     -   Offload detailed protocols, patterns, and examples to `references/*.md`.
 4.  **Research & Discovery**:
-    -   If provided with **URLs**: Use the `subagent` tool (`bun .gemini/tools/subagent.ts "Explore <url>"`) to fetch content.
+    -   If provided with **URLs**: Spawn a subagent ("Explore <url>") to fetch content.
     -   If provided with a **GitHub URL**: Use `run_shell_command` to run `repomix --remote <url>` (check if `repomix` is installed first, or suggest installation).
     -   If documentation is needed: Use the `research` command (`gemini research "..."`) or skill.
 5.  **Implementation**:

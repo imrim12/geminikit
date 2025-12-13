@@ -71,6 +71,32 @@ function checkGeminiConfig(): CheckResult {
   return { passed: existsSync(configPath) };
 }
 
+function checkEnvironment(): CheckResult {
+  const env = process.env;
+  const useVertex = env.GOOGLE_GENAI_USE_VERTEXAI === 'true';
+  const hasVertexVars = env.GOOGLE_CLOUD_PROJECT && env.GOOGLE_CLOUD_LOCATION;
+  const hasApiKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY;
+
+  const vertexRecommendation = 'For a much better experience, read more at https://geminicli.com/docs/get-started/authentication/#use-vertex-ai';
+
+  if (useVertex && hasVertexVars) {
+    return { passed: true, details: '(Vertex AI configured)' };
+  }
+  
+  if (hasApiKey) {
+     return { passed: true, details: `(Google AI Studio/API Key detected. While functional, consider upgrading to Vertex AI for optimal experience and future compatibility. 
+   💡 Recommendation: ${vertexRecommendation})` };
+  }
+
+  if (useVertex && !hasVertexVars) {
+      return { passed: false, details: `(Vertex AI setup incomplete. GOOGLE_GENAI_USE_VERTEXAI is true, but GOOGLE_CLOUD_PROJECT or GOOGLE_CLOUD_LOCATION are missing. 
+   💡 Action Required: Complete your Vertex AI configuration. ${vertexRecommendation})` };
+  }
+
+  return { passed: false, details: `(No valid authentication found. Geminikit cannot interact with Google APIs without proper setup. 
+   💡 Action Required: Please configure authentication. We strongly recommend Vertex AI. ${vertexRecommendation})` };
+}
+
 export function runDoctor() {
   console.log('Gemini Kit Doctor 🩺\n');
 
@@ -80,6 +106,7 @@ export function runDoctor() {
     { name: 'Bun Installation', check: checkBun },
     { name: 'Gemini CLI Installation', check: checkGeminiCLI },
     { name: 'Gemini Configuration (.gemini)', check: checkGeminiConfig },
+    { name: 'Environment Variables', check: checkEnvironment },
   ];
 
   let allPassed = true;
@@ -89,7 +116,7 @@ export function runDoctor() {
     if (result.passed) {
       console.log(`✅ ${name} ${result.details || ''}`);
     } else {
-      console.log(`❌ ${name}`);
+      console.log(`❌ ${name} ${result.details || ''}`);
       allPassed = false;
     }
   }

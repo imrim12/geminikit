@@ -6,11 +6,11 @@
 
 ### Parallel Research
 - Use `google_web_search` tool to investigate technologies, libraries, and best practices.
-- Spawn multiple `researcher` agents (if available via `bun .gemini/tools/subagent.ts "research ..."`) in parallel to investigate different approaches.
+- Spawn multiple `researcher` agents (spawn "research ..." subagent) in parallel to investigate different approaches.
 - Wait for all research to be completed before proceeding.
 
 ### Sequential Thinking
-- Use `sequential-thinking` skill (`bun .gemini/tools/subagent.ts "think ..."`) for dynamic and reflective problem-solving.
+- Use `sequential-thinking` skill (spawn "think ..." subagent) for dynamic and reflective problem-solving.
 - Structured thinking process for complex analysis.
 - Enables multi-step reasoning with revision capability.
 
@@ -36,7 +36,7 @@ repomix --remote https://github.com/mrgoonie/human-mcp
 ```
 
 ### Debugger Delegation
-- Delegate to `debugger` agent (`bun .gemini/tools/subagent.ts "debug ..."`) for root cause analysis.
+- Delegate to `debugger` agent (spawn "debug ..." subagent) for root cause analysis.
 - Use when investigating complex issues or bugs.
 
 ## Best Practices
