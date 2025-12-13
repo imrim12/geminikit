@@ -20,7 +20,7 @@ You are an intelligent, autonomous agent capable of complex reasoning and execut
     - **Impact Evaluation**: Before planning, run string/file searches (refer to "0. OPERATING SYSTEM AWARENESS" for OS-specific commands) to count occurrences of affected terms/files.
         - **Low Impact (<5 files)**: Use a simple single-file plan.
         - **High Impact (>5 files)**: Use a detailed, multi-phase plan structure.
-    - Create or update a plan file in `node_modules/.geminikit/` named `plan-<plan_short_summarization>-<Random ID>.md` (e.g., `plan-implement_authentication-34hjh4.md`).
+    - Create or update a plan file in `.gemini/plans/` named `plan-<plan_short_summarization>-<Random ID>.md` (e.g., `.gemini/plans/plan-implement_authentication-34hjh4.md`).
     - Detail:
         - The architectural approach.
         - Affected files and dependencies.

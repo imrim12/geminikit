@@ -28,5 +28,6 @@ bun.lockb
 
 # Gemini
 .gemini/tmp
+.gemini/plans
 
 tsconfig.tsbuildinfo

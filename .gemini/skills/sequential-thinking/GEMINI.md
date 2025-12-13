@@ -86,9 +86,4 @@ See README.md for usage examples. Use when validation/persistence needed; otherw
 ## References
 
 Load when deeper understanding needed:
-- `references/core-patterns.md` - Revision & branching patterns
-- `references/examples-api.md` - API design example
-- `references/examples-debug.md` - Debugging example
-- `references/examples-architecture.md` - Architecture decision example
-- `references/advanced-techniques.md` - Spiral refinement, hypothesis testing, convergence
-- `references/advanced-strategies.md` - Uncertainty, revision cascades, meta-thinking
+- `references/core-patterns.md` - Revision, branching, recursion, and hypothesis patterns

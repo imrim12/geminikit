@@ -1,5 +1,7 @@
 import { parseArgs } from 'node:util'
 import { spawn } from 'bun'
+import { existsSync, mkdirSync } from 'node:fs'
+import { join } from 'node:path'
 
 const { values } = parseArgs({
   args: Bun.argv,
@@ -17,6 +19,13 @@ if (!values.input) {
   process.exit(1)
 }
 
+async function runCommand(cmd: string[]): Promise<boolean> {
+  console.log(`Command: ${cmd.join(' ')}`)
+  const proc = spawn(cmd, { stdout: 'inherit', stderr: 'inherit' })
+  await proc.exited
+  return proc.exitCode === 0
+}
+
 async function main() {
   const inputFile = values.input
 
@@ -29,29 +38,56 @@ async function main() {
   const config = await configFile.json()
   console.log(`🚀 Starting analysis using backend: ${config.backend}`)
 
-  const outputDir = `.gemini/planning/${Date.now()}_recording_analysis`
-  await Bun.spawn(['mkdir', '-p', outputDir]).exited // Ensure dir exists
+  // 2. Prepare Output & Temp Directories
+  const timestamp = Date.now()
+  const outputDir = `.gemini/planning/${timestamp}_recording_analysis`
+  const framesDir = `${outputDir}/frames`
+  
+  if (!existsSync(framesDir)) {
+    mkdirSync(framesDir, { recursive: true })
+  }
 
   console.log(`📂 Output directory: ${outputDir}`)
+  console.log(`🎞️  Frames directory: ${framesDir}`)
 
-  // 3. Spawn Vision Processor
-  // Determine path to python script relative to this script or CWD
+  // 3. Extract Frames (1 frame per second)
+  console.log('running ffmpeg frame extraction...')
+  const ffmpegCmd = [
+    'ffmpeg',
+    '-i', inputFile!,
+    '-vf', 'fps=1', 
+    '-q:v', '2', // Good quality JPEG
+    `${framesDir}/frame_%04d.jpg`
+  ]
+
+  const ffmpegSuccess = await runCommand(ffmpegCmd)
+  if (!ffmpegSuccess) {
+    console.error('❌ FFmpeg frame extraction failed.')
+    process.exit(1)
+  }
+
+  // 4. Spawn Vision Processor
   // Assuming run from project root as per GEMINI.md instructions
   const pythonScript = '.gemini/skills/recording-analysis/tools/vision_processor.py'
-
-  const cmd = ['python', pythonScript, '--backend', config.backend, '--input', inputFile!, '--output', outputDir]
+  
+  // Note: We pass the FRAMES directory now, not the video file
+  const cmd = [
+    'python', 
+    pythonScript, 
+    '--backend', config.backend, 
+    '--input_dir', framesDir, 
+    '--output', outputDir
+  ]
 
   console.log(`Debugger: Running ${cmd.join(' ')}`)
+  const procSuccess = await runCommand(cmd)
 
-  const proc = spawn(cmd, { stdout: 'inherit', stderr: 'inherit' })
-  const exitCode = await proc.exited
-
-  if (exitCode === 0) {
+  if (procSuccess) {
     console.log('✅ Analysis complete.')
   }
   else {
     console.error('❌ Analysis failed.')
-    process.exit(exitCode)
+    process.exit(1)
   }
 }
 

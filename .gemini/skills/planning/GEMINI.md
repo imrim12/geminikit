@@ -64,7 +64,7 @@ Load: `references/output-standards.md`
 
 Short plan (Low Impact):
 ```
-node_modules/.geminikit/
+.gemini/plans/
     ├── plan-<plan_short_summarization>-<Random ID>.md
     ├── ...
 ```

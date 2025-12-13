@@ -9,7 +9,7 @@
     *   **Low Impact**: Affects < 5 files.
     *   **High Impact**: Affects > 5 files or involves core architecture/database schemas.
 3.  **Decide Structure**:
-    *   **Simple Plan**: Use a single markdown file in `node_modules/.geminikit/`.
+    *   **Simple Plan**: Use a single markdown file in `.gemini/plans/`.
     *   **Detailed Plan**: Use the folder structure in `plans/` with separate phase files.
 
 ## Directory Structure
@@ -17,9 +17,9 @@
 ### Plan Location
 
 **Simple Plan (Low Impact)**:
-Save plans in `node_modules/.geminikit/` directory with a short summarization string to avoid collisions.
-Format: `node_modules/.geminikit/plan-<plan_short_summarization>-<Random ID>.md`
-Example: `node_modules/.geminikit/plan-fix_bug_login-34hjh4.md`
+Save plans in `.gemini/plans/` directory with a short summarization string to avoid collisions.
+Format: `.gemini/plans/plan-<plan_short_summarization>-<Random ID>.md`
+Example: `.gemini/plans/plan-fix_bug_login-34hjh4.md`
 
 **Detailed Plan (High Impact)**:
 Save plans in `plans/` directory with a dedicated folder.
@@ -30,7 +30,7 @@ Example: `plans/auth_refactor-98k2j1/`
 
 **Option A: Simple Plan (Single File)**
 ```
-node_modules/.geminikit/
+.gemini/plans/
     ├── plan-fix_bug_login-34hjh4.md
     ├── plan-change-button-color-67gdo4.md
     └── ...

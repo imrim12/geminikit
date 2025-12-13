@@ -12,16 +12,44 @@ A comprehensive Gemini CLI workspace kit configured as a Bun monorepo. This pack
 ## Features
 
 *   **Skill System**: Modular skills for specialized tasks.
-    *   **Sequential Thinking**: Structured problem-solving methodology.
-    *   **Chrome DevTools**: Browser automation and debugging.
-    *   **AI Multimodal**: Audio, video, and image processing.
-    *   **Code Review**: Protocols for rigorous code analysis.
-    *   **Planning**: Structured planning workflow.
-    *   **Debugging**: Systematic debugging framework.
-    *   **Research**: Deep research and report generation.
-*   **Bun Monorepo**: optimized for speed and modern JavaScript development.
+    *   **Chrome DevTools**: Browser automation, performance analysis, and debugging via Puppeteer.
+    *   **Code Review**: Protocols for rigorous technical feedback reception, review requests, and verification gates.
+    *   **Debugging**: Systematic framework (Investigation, Pattern Analysis, Hypothesis, Implementation) with root cause tracing.
+    *   **Frontend Design**: Aesthetic direction, strict frontend implementation rules, and high-quality image sourcing.
+    *   **Media Processing**: FFmpeg and ImageMagick wrappers for optimized video/audio conversion and batch image processing.
+    *   **Planning**: Structured impact analysis, architectural design, and detailed implementation planning.
+    *   **Presentation**: Professional Slidev presentation generation using a "Think-Plan-Act" workflow.
+    *   **Problem Solving**: Strategic techniques (Simplification Cascades, Inversion, etc.) to overcome blocks.
+    *   **Recording Analysis**: Adaptive video/screen recording analysis using OmniParser (GPU) or PaddleOCR (CPU).
+    *   **Research**: Deep technical research, documentation analysis, and report synthesis.
+    *   **Sequential Thinking**: Structured, reflective thought process for decomposing complex problems.
+*   **Bun Monorepo**: Optimized for speed and modern JavaScript development.
 *   **TypeScript**: Full type safety across all scripts and tools.
 *   **GeminiKit CLI (`gk`)**: Dedicated CLI to manage the environment and logs.
+
+## Prerequisites & GPU Support (CUDA)
+
+The `recording-analysis` skill and certain Python-based tools require specific setup for GPU acceleration.
+
+### CUDA Setup Guide
+
+It appears you have an NVIDIA GPU, but PyTorch cannot access it. This usually means the CUDA Toolkit is missing or mismatched.
+
+#### Quick Fixes
+
+**Windows**
+1. Install the latest NVIDIA Drivers.
+2. Install PyTorch with CUDA support:
+   ```bash
+   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+   ```
+
+**Linux**
+1. Install NVIDIA drivers and CUDA toolkit:
+   ```bash
+   sudo apt install nvidia-cuda-toolkit
+   ```
+2. Reinstall PyTorch (see above).
 
 ## Installation
 
@@ -91,8 +119,6 @@ mkdir -p node_modules/.gemini
 ```
 (Note: `mkdir -p` works on Linux/macOS. For Windows, `mkdir node_modules\.gemini` or `New-Item -ItemType Directory -Force -Path "node_modules/.gemini"`)
 
-After creating the folder, you may need to re-run `npx gk setup` or manually copy the necessary skill files if they are missing.
-
 #### Troubleshooting: pnpm and `gk` command
 
 When using `pnpm`, you might encounter issues where the `gk` command is not automatically registered in your path, or its peer dependencies are not correctly linked. This is often due to `pnpm`'s strict linking model.
@@ -103,15 +129,6 @@ To ensure `gk` works as expected, add the following lines to your project's `.np
 shamefully-hoist=true
 auto-install-peers=true
 ```
-
-These settings tell `pnpm` to hoist dependencies similarly to `npm` and `yarn` (allowing direct access to hoisted packages) and to automatically install peer dependencies. After modifying `.npmrc`, run `pnpm install` again.
-
-Alternatively, if you prefer not to modify `.npmrc` globally or per-project, you can manually install `geminikit`:
-
-```bash
-pnpm install -g geminikit
-```
-This ensures the `gk` command is available globally.
 
 ## GeminiKit CLI (`gk`)
 
@@ -150,8 +167,20 @@ gemini research "Current state of quantum computing"
 # Automate a browser task
 gemini chrome "Take a screenshot of google.com"
 
-# Analyze media
-gemini multimodal "Describe this image" --files image.jpg
+# Process media (video/audio/images)
+gemini media "Optimize this video for web"
+
+# Analyze screen recordings or videos
+gemini use-mcp "Analyze this screen recording for UI elements"
+
+# Solve a blocking problem
+gemini solve "I'm stuck on the database schema design"
+
+# Review code or get feedback
+gemini review "Please review my recent changes in src/auth"
+
+# Generate a presentation
+gemini use-mcp "Create a slide deck about Node.js performance"
 ```
 
 ### Direct Script Usage
@@ -164,6 +193,9 @@ bun .gemini/skills/sequential-thinking/scripts/process-thought.ts --thought "Ini
 
 # Run a browser automation script
 bun .gemini/skills/chrome-devtools/scripts/navigate.ts --url https://example.com
+
+# Run media conversion
+bun .gemini/skills/media-processing/scripts/convert.ts --input video.mkv --preset web
 ```
 
 ## Development

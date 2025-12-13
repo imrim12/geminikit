@@ -1,9 +1,12 @@
 ---
 name: recording-analysis
-description: Adaptive video and screen recording analysis pipeline using OmniParser (GPU) or PaddleOCR (CPU). Performs strict environment diagnosis before execution.
+description: [PROTOTYPE] Adaptive video and screen recording analysis pipeline using OmniParser (GPU) or PaddleOCR (CPU). Performs strict environment diagnosis before execution.
 ---
 
-# Recording Analysis Skill
+# Recording Analysis Skill [PROTOTYPE]
+
+**STATUS: PROTOTYPE / EXPERIMENTAL**
+This skill is currently in a prototype state. It uses a mock Vision Processor for testing the orchestration pipeline.
 
 Analyze video or screen recordings to extract UI components and textual information using an adaptive pipeline.
 
@@ -37,8 +40,11 @@ bun .gemini/skills/recording-analysis/scripts/orchestrator.ts --input <video-pat
 ## Architecture
 
 1.  **Diagnosis**: Checks for GPU/CUDA/Torch. Generates `env_config.json`.
-2.  **Orchestration**: Reads config, extracts frames (via `media-processing`), and delegates to Vision Processor.
-3.  **Vision Processor**: Python-based tool running OmniParser or PaddleOCR.
+2.  **Orchestration**: 
+    -   Reads config.
+    -   **Extracts frames** using FFmpeg (system dependency).
+    -   Delegates frame analysis to Vision Processor.
+3.  **Vision Processor**: Python-based tool (currently `tools/vision_processor.py`) running OmniParser or PaddleOCR.
 
 ## References
 
