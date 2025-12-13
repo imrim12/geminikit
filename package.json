@@ -1,6 +1,6 @@
 {
   "name": "geminikit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Gemini CLI Workspace Kit",
   "private": false,
   "files": [
