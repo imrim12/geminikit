@@ -14,7 +14,7 @@ INSTRUCTIONS:
     -   Video Optimization: `bun .gemini/skills/media-processing/scripts/optimize.ts`
     -   Batch Image Resize: `bun .gemini/skills/media-processing/scripts/resize.ts`
 3.  **Construct Command**: Build the command with appropriate flags (input, output, preset, etc.).
-4.  **Execute**: Run the command using `run_shell_command`.
+4.  **Execute**: Run the command using `run_shell_command` with the FULL path.
     -   Always verify `ffmpeg` or `magick` availability if unsure.
 5.  **Report**: Confirm the output location and any relevant stats.
 

@@ -40,5 +40,10 @@ tsconfig.tsbuildinfo
 # Gemini Specific
 .gemini/tmp
 
-# Packages
-./packages
+# Source code
+./src
+
+# Environment files
+.env
+.env.local
+google-service-account.json

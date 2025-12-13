@@ -1,27 +1,27 @@
 #!/usr/bin/env bun
+import type { PuppeteerLifeCycleEvent } from 'puppeteer'
+import * as fs from 'node:fs/promises'
 /**
  * Get DOM snapshot with selectors
  * Usage: bun snapshot.ts [--url https://example.com] [--output snapshot.json]
  */
-import { getBrowser, getPage, closeBrowser, parseArgs, outputJSON, outputError } from './lib/browser.js';
-import fs from 'fs/promises';
-import { PuppeteerLifeCycleEvent } from 'puppeteer';
+import { closeBrowser, getBrowser, getPage, outputJSON, parseArgs } from './lib/browser.js'
 
 async function snapshot() {
-  const args = parseArgs(process.argv.slice(2));
+  const args = parseArgs(process.argv.slice(2))
 
   try {
     const browser = await getBrowser({
-      headless: args.headless !== 'false'
-    });
+      headless: args.headless !== 'false',
+    })
 
-    const page = await getPage(browser);
+    const page = await getPage(browser)
 
     // Navigate if URL provided
     if (args.url && typeof args.url === 'string') {
       await page.goto(args.url, {
-        waitUntil: (args['wait-until'] as PuppeteerLifeCycleEvent) || 'networkidle2'
-      });
+        waitUntil: (args['wait-until'] as PuppeteerLifeCycleEvent) || 'networkidle2',
+      })
     }
 
     // Get interactive elements with metadata
@@ -35,50 +35,52 @@ async function snapshot() {
         '[onclick]',
         '[role="button"]',
         '[role="link"]',
-        '[contenteditable]'
-      ];
+        '[contenteditable]',
+      ]
 
-      const elements: any[] = [];
-      const selector = interactiveSelectors.join(', ');
-      const nodes = document.querySelectorAll(selector);
+      const elements: any[] = []
+      const selector = interactiveSelectors.join(', ')
+      const nodes = document.querySelectorAll(selector)
 
       function getXPath(element: Element): string {
         if (element.id) {
-          return `//*[@id="${element.id}"]`;
+          return `//*[@id="${element.id}"]`
         }
         if (element === document.body) {
-          return '/html/body';
+          return '/html/body'
         }
-        let ix = 0;
-        const siblings = element.parentNode?.childNodes || [];
+        let ix = 0
+        const siblings = element.parentNode?.childNodes || []
         for (let i = 0; i < siblings.length; i++) {
-          const sibling = siblings[i];
+          const sibling = siblings[i]
           if (sibling === element) {
-            return getXPath(element.parentNode as Element) + '/' + element.tagName.toLowerCase() + '[' + (ix + 1) + ']';
+            return `${getXPath(element.parentNode as Element)}/${element.tagName.toLowerCase()}[${ix + 1}]`
           }
           if (sibling.nodeType === 1 && (sibling as Element).tagName === element.tagName) {
-            ix++;
+            ix++
           }
         }
-        return '';
+        return ''
       }
 
       nodes.forEach((el: any, index: number) => {
-        const rect = el.getBoundingClientRect();
+        const rect = el.getBoundingClientRect()
 
         // Generate unique selector
-        let uniqueSelector = '';
+        let uniqueSelector = ''
         if (el.id) {
-          uniqueSelector = `#${el.id}`;
-        } else if (el.className && typeof el.className === 'string') {
-          const classes = Array.from(el.classList).join('.');
-          uniqueSelector = `${el.tagName.toLowerCase()}.${classes}`;
-        } else {
-          uniqueSelector = el.tagName.toLowerCase();
+          uniqueSelector = `#${el.id}`
+        }
+        else if (el.className && typeof el.className === 'string') {
+          const classes = Array.from(el.classList).join('.')
+          uniqueSelector = `${el.tagName.toLowerCase()}.${classes}`
+        }
+        else {
+          uniqueSelector = el.tagName.toLowerCase()
         }
 
         elements.push({
-          index: index,
+          index,
           tagName: el.tagName.toLowerCase(),
           type: el.type || null,
           id: el.id || null,
@@ -94,44 +96,46 @@ async function snapshot() {
             x: rect.x,
             y: rect.y,
             width: rect.width,
-            height: rect.height
-          }
-        });
-      });
+            height: rect.height,
+          },
+        })
+      })
 
-      return elements;
-    });
+      return elements
+    })
 
     const result = {
       success: true,
       url: page.url(),
       title: await page.title(),
       elementCount: elements.length,
-      elements: elements
-    };
+      elements,
+    }
 
     if (args.output && typeof args.output === 'string') {
-      await fs.writeFile(args.output, JSON.stringify(result, null, 2));
+      await fs.writeFile(args.output, JSON.stringify(result, null, 2))
       outputJSON({
         success: true,
         output: args.output,
-        elementCount: elements.length
-      });
-    } else {
-      outputJSON(result);
+        elementCount: elements.length,
+      })
+    }
+    else {
+      outputJSON(result)
     }
 
     if (args.close !== 'false') {
-      await closeBrowser();
+      await closeBrowser()
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     outputJSON({
-        success: false,
-        error: error.message,
-        stack: error.stack
-      });
-      process.exit(1);
+      success: false,
+      error: error.message,
+      stack: error.stack,
+    })
+    process.exit(1)
   }
 }
 
-snapshot();
+snapshot()

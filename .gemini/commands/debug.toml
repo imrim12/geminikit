@@ -9,7 +9,7 @@ YOUR GOAL: Identify the root cause of the reported issue and apply a fix, follow
 
 INSTRUCTIONS:
 1.  **Systematic Debugging**: Follow the Four Phases (Investigation, Pattern Analysis, Hypothesis & Testing, Implementation).
-2.  **Root Cause Tracing**: If deep in the stack, trace backwards. Use `scripts/find-polluter.sh` (via `run_shell_command`) if dealing with test pollution.
+2.  **Root Cause Tracing**: If deep in the stack, trace backwards. Use `.gemini/skills/debugging/scripts/find-polluter.sh` (via `run_shell_command`) if dealing with test pollution.
 3.  **Defense-in-Depth**: When fixing, apply validation at multiple layers (Entry, Business Logic, Environment, Debug).
 4.  **Verification**: NEVER claim success without running a verification command.
 

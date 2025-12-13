@@ -12,142 +12,145 @@
  *   bun process-thought.ts --reset  # Reset thought history
  */
 
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 // Configuration
-const HISTORY_FILE = path.join(import.meta.dir, '.thought-history.json');
-const DISABLE_LOGGING = process.env.DISABLE_THOUGHT_LOGGING?.toLowerCase() === 'true';
+const HISTORY_FILE = path.join(import.meta.dir, '.thought-history.json')
 
 interface ThoughtData {
-  thought: string;
-  thoughtNumber: number;
-  totalThoughts: number;
-  nextThoughtNeeded: boolean;
-  isRevision?: boolean;
-  revisesThought?: number;
-  branchFromThought?: number;
-  branchId?: string;
-  needsMoreThoughts?: boolean;
-  timestamp?: string;
+  thought: string
+  thoughtNumber: number
+  totalThoughts: number
+  nextThoughtNeeded: boolean
+  isRevision?: boolean
+  revisesThought?: number
+  branchFromThought?: number
+  branchId?: string
+  needsMoreThoughts?: boolean
+  timestamp?: string
 }
 
 interface ValidationResult {
-  success: boolean;
-  errors?: string[];
-  status?: string;
-  thoughtNumber?: number;
-  totalThoughts?: number;
-  nextThoughtNeeded?: boolean;
-  branches?: string[];
-  thoughtHistoryLength?: number;
-  timestamp?: string;
+  success: boolean
+  errors?: string[]
+  status?: string
+  thoughtNumber?: number
+  totalThoughts?: number
+  nextThoughtNeeded?: boolean
+  branches?: string[]
+  thoughtHistoryLength?: number
+  timestamp?: string
 }
 
 interface HistoryData {
-  thoughtHistory: ThoughtData[];
-  branches: Record<string, ThoughtData[]>;
+  thoughtHistory: ThoughtData[]
+  branches: Record<string, ThoughtData[]>
 }
 
 export class ThoughtProcessor {
-  private thoughtHistory: ThoughtData[] = [];
-  private branches: Record<string, ThoughtData[]> = {};
+  private thoughtHistory: ThoughtData[] = []
+  private branches: Record<string, ThoughtData[]> = {}
 
   constructor() {
-    this.loadHistory();
+    this.loadHistory()
   }
 
-  loadHistory() {
+  async loadHistory() {
     try {
-      if (fs.existsSync(HISTORY_FILE)) {
-        const data: HistoryData = JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8'));
-        this.thoughtHistory = data.thoughtHistory || [];
-        this.branches = data.branches || {};
-      } else {
-        this.thoughtHistory = [];
-        this.branches = {};
+      const file = Bun.file(HISTORY_FILE)
+      if (await file.exists()) {
+        const data: HistoryData = await file.json()
+        this.thoughtHistory = data.thoughtHistory || []
+        this.branches = data.branches || {}
       }
-    } catch (error) {
-      this.thoughtHistory = [];
-      this.branches = {};
+      else {
+        this.thoughtHistory = []
+        this.branches = {}
+      }
+    }
+    catch {
+      this.thoughtHistory = []
+      this.branches = {}
     }
   }
 
-  saveHistory() {
-    fs.writeFileSync(
+  async saveHistory() {
+    await Bun.write(
       HISTORY_FILE,
       JSON.stringify({
         thoughtHistory: this.thoughtHistory,
-        branches: this.branches
-      }, null, 2)
-    );
+        branches: this.branches,
+      }, null, 2),
+    )
   }
 
-  resetHistory() {
-    this.thoughtHistory = [];
-    this.branches = {};
-    if (fs.existsSync(HISTORY_FILE)) {
-      fs.unlinkSync(HISTORY_FILE);
+  async resetHistory() {
+    this.thoughtHistory = []
+    this.branches = {}
+    const file = Bun.file(HISTORY_FILE)
+    if (await file.exists()) {
+      fs.unlinkSync(HISTORY_FILE) // Bun doesn't have a direct unlink yet
     }
   }
 
   validateThought(input: any): string[] {
-    const errors: string[] = [];
+    const errors: string[] = []
 
     if (!input.thought || typeof input.thought !== 'string' || input.thought.trim() === '') {
-      errors.push('Invalid thought: must be a non-empty string');
+      errors.push('Invalid thought: must be a non-empty string')
     }
 
     if (!input.thoughtNumber || typeof input.thoughtNumber !== 'number' || input.thoughtNumber < 1) {
-      errors.push('Invalid thoughtNumber: must be a positive number');
+      errors.push('Invalid thoughtNumber: must be a positive number')
     }
 
     if (!input.totalThoughts || typeof input.totalThoughts !== 'number' || input.totalThoughts < 1) {
-      errors.push('Invalid totalThoughts: must be a positive number');
+      errors.push('Invalid totalThoughts: must be a positive number')
     }
 
     if (typeof input.nextThoughtNeeded !== 'boolean') {
-      errors.push('Invalid nextThoughtNeeded: must be a boolean');
+      errors.push('Invalid nextThoughtNeeded: must be a boolean')
     }
 
     // Optional field validations
     if (input.isRevision !== undefined && typeof input.isRevision !== 'boolean') {
-      errors.push('Invalid isRevision: must be a boolean');
+      errors.push('Invalid isRevision: must be a boolean')
     }
 
     if (input.revisesThought !== undefined && (typeof input.revisesThought !== 'number' || input.revisesThought < 1)) {
-      errors.push('Invalid revisesThought: must be a positive number');
+      errors.push('Invalid revisesThought: must be a positive number')
     }
 
     if (input.branchFromThought !== undefined && (typeof input.branchFromThought !== 'number' || input.branchFromThought < 1)) {
-      errors.push('Invalid branchFromThought: must be a positive number');
+      errors.push('Invalid branchFromThought: must be a positive number')
     }
 
     if (input.branchId !== undefined && typeof input.branchId !== 'string') {
-      errors.push('Invalid branchId: must be a string');
+      errors.push('Invalid branchId: must be a string')
     }
 
     if (input.needsMoreThoughts !== undefined && typeof input.needsMoreThoughts !== 'boolean') {
-      errors.push('Invalid needsMoreThoughts: must be a boolean');
+      errors.push('Invalid needsMoreThoughts: must be a boolean')
     }
 
-    return errors;
+    return errors
   }
 
-  processThought(input: any): ValidationResult {
-    const errors = this.validateThought(input);
+  async processThought(input: any): Promise<ValidationResult> {
+    const errors = this.validateThought(input)
 
     if (errors.length > 0) {
       return {
         success: false,
         errors,
-        status: 'failed'
-      };
+        status: 'failed',
+      }
     }
 
     // Auto-adjust totalThoughts if thoughtNumber exceeds it
     if (input.thoughtNumber > input.totalThoughts) {
-      input.totalThoughts = input.thoughtNumber;
+      input.totalThoughts = input.thoughtNumber
     }
 
     // Create thought data
@@ -161,22 +164,22 @@ export class ThoughtProcessor {
       branchFromThought: input.branchFromThought,
       branchId: input.branchId,
       needsMoreThoughts: input.needsMoreThoughts,
-      timestamp: new Date().toISOString()
-    };
+      timestamp: new Date().toISOString(),
+    }
 
     // Add to history
-    this.thoughtHistory.push(thoughtData);
+    this.thoughtHistory.push(thoughtData)
 
     // Track branches
     if (thoughtData.branchFromThought && thoughtData.branchId) {
       if (!this.branches[thoughtData.branchId]) {
-        this.branches[thoughtData.branchId] = [];
+        this.branches[thoughtData.branchId] = []
       }
-      this.branches[thoughtData.branchId].push(thoughtData);
+      this.branches[thoughtData.branchId].push(thoughtData)
     }
 
     // Save history
-    this.saveHistory();
+    await this.saveHistory()
 
     return {
       success: true,
@@ -185,67 +188,73 @@ export class ThoughtProcessor {
       nextThoughtNeeded: thoughtData.nextThoughtNeeded,
       branches: Object.keys(this.branches),
       thoughtHistoryLength: this.thoughtHistory.length,
-      timestamp: thoughtData.timestamp
-    };
+      timestamp: thoughtData.timestamp,
+    }
   }
 
   getHistory() {
     return {
       thoughts: this.thoughtHistory,
       branches: this.branches,
-      totalThoughts: this.thoughtHistory.length
-    };
+      totalThoughts: this.thoughtHistory.length,
+    }
   }
 }
 
 // CLI Interface
 if (import.meta.main) {
-  const args = process.argv.slice(2);
-  const processor = new ThoughtProcessor();
+  const args = process.argv.slice(2)
+  const processor = new ThoughtProcessor()
+
+  // Ensure history is loaded
+  await processor.loadHistory()
 
   // Parse arguments
   const parseArgs = (args: string[]) => {
-    const parsed: any = {};
+    const parsed: any = {}
     for (let i = 0; i < args.length; i++) {
-      const arg = args[i];
+      const arg = args[i]
       if (arg.startsWith('--')) {
-        const key = arg.slice(2);
-        const value = args[i + 1];
+        const key = arg.slice(2)
+        const value = args[i + 1]
 
         if (key === 'reset') {
-          return { reset: true };
+          return { reset: true }
         }
 
         if (key === 'history') {
-          return { history: true };
+          return { history: true }
         }
 
         if (value && !value.startsWith('--')) {
           // Parse boolean
-          if (value === 'true') parsed[key] = true;
-          else if (value === 'false') parsed[key] = false;
+          if (value === 'true')
+            parsed[key] = true
+          else if (value === 'false')
+            parsed[key] = false
           // Parse number
-          else if (!isNaN(Number(value))) parsed[key] = parseFloat(value);
+          else if (!Number.isNaN(Number(value)))
+            parsed[key] = Number.parseFloat(value)
           // String
-          else parsed[key] = value;
-          i++;
+          else parsed[key] = value
+          i++
         }
       }
     }
-    return parsed;
-  };
+    return parsed
+  }
 
-  const input = parseArgs(args);
+  const input = parseArgs(args)
 
   if (input.reset) {
-    processor.resetHistory();
-    console.log(JSON.stringify({ success: true, message: 'History reset' }, null, 2));
-    process.exit(0);
+    await processor.resetHistory()
+    console.log(JSON.stringify({ success: true, message: 'History reset' }, null, 2))
+    process.exit(0)
   }
 
   if (input.history) {
-    console.log(JSON.stringify(processor.getHistory(), null, 2));
-    process.exit(0);
+    console.log(JSON.stringify(processor.getHistory(), null, 2))
+    process.exit(0)
   }
 
   // Map CLI args to expected field names
@@ -258,10 +267,10 @@ if (import.meta.main) {
     revisesThought: input.revision,
     branchFromThought: input.branch,
     branchId: input.branchId,
-    needsMoreThoughts: input.needsMore
-  };
+    needsMoreThoughts: input.needsMore,
+  }
 
-  const result = processor.processThought(thoughtInput);
-  console.log(JSON.stringify(result, null, 2));
-  process.exit(result.success ? 0 : 1);
+  const result = await processor.processThought(thoughtInput)
+  console.log(JSON.stringify(result, null, 2))
+  process.exit(result.success ? 0 : 1)
 }

@@ -10,7 +10,7 @@ YOUR GOAL: Perform browser automation, scraping, or analysis tasks using the pro
 INSTRUCTIONS:
 1.  **Identify Task**: Determine which script (`navigate.ts`, `screenshot.ts`, `click.ts`, etc.) is best for the task.
 2.  **Prepare Arguments**: Construct the correct flags (e.g., `--url`, `--selector`, `--output`).
-3.  **Execute**: Use `run_shell_command` to run the script via `bun`.
+3.  **Execute**: Use `run_shell_command` to run the script via `bun` with the FULL path.
     -   Example: `bun .gemini/skills/chrome-devtools/scripts/navigate.ts --url https://example.com`
 4.  **Verify**: Check the JSON output on stdout for `"success": true`.
 5.  **Report**: Summarize the result or provide the requested data.
