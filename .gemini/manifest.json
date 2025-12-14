@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-12-14T04:30:33.879Z",
+  "generatedAt": "2025-12-14T17:44:58.835Z",
   "files": [
     "GEMINI.md",
     "LICENSE",
@@ -43,6 +43,9 @@
     "skills/debugging/references/verification.md",
     "skills/debugging/scripts/find-polluter.sh",
     "skills/debugging/scripts/find-polluter.test.md",
+    "skills/directus/GEMINI.md",
+    "skills/directus/references/api-testing.md",
+    "skills/directus/references/workflow.md",
     "skills/frontend-design/GEMINI.md",
     "skills/frontend-design/references/aesthetic-directions.md",
     "skills/frontend-design/references/frontend-rules.md",
@@ -80,13 +83,15 @@
     "skills/recording-analysis/GEMINI.md",
     "skills/recording-analysis/references/error_handling.md",
     "skills/recording-analysis/references/workflow_routing.md",
-    "skills/recording-analysis/scripts/diagnose.ts",
     "skills/recording-analysis/scripts/orchestrator.ts",
-    "skills/recording-analysis/tools/vision_processor.py",
     "skills/research/GEMINI.md",
+    "skills/screenshot-analysis/GEMINI.md",
+    "skills/screenshot-analysis/scripts/inspect.ts",
     "skills/sequential-thinking/GEMINI.md",
     "skills/sequential-thinking/references/core-patterns.md",
     "skills/sequential-thinking/scripts/format-thought.ts",
-    "skills/sequential-thinking/scripts/process-thought.ts"
+    "skills/sequential-thinking/scripts/process-thought.ts",
+    "skills/ui-development/GEMINI.md",
+    "skills/ui-development/scripts/bridge.ts"
   ]
 }
