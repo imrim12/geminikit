@@ -1,5 +1,6 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import { copyFile, readJson } from './runtime'
 
 interface Manifest {
   version: string
@@ -47,8 +48,7 @@ export async function runUpdate() {
 
   let sourceManifest: Manifest
   try {
-    const content = await Bun.file(sourceManifestPath).text()
-    sourceManifest = JSON.parse(content)
+    sourceManifest = await readJson(sourceManifestPath)
   }
   catch {
     console.error('[GeminiKit] Error: Failed to parse source manifest.')
@@ -58,8 +58,7 @@ export async function runUpdate() {
   let destManifest: Manifest | null = null
   if (fs.existsSync(destManifestPath)) {
     try {
-      const content = await Bun.file(destManifestPath).text()
-      destManifest = JSON.parse(content)
+      destManifest = await readJson(destManifestPath)
     }
     catch {
       console.warn('[GeminiKit] Warning: Failed to parse destination manifest. Treating as fresh update.')
@@ -140,7 +139,7 @@ async function safeCopyFile(src: string, dest: string) {
     if (fs.existsSync(dest)) {
       fs.unlinkSync(dest) // Break hard link / remove existing
     }
-    await Bun.write(dest, Bun.file(src))
+    await copyFile(src, dest)
   }
   catch (e: any) {
     console.error(`[GeminiKit] Error copying ${path.basename(src)}: ${e.message}`)

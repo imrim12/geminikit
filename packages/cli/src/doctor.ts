@@ -1,6 +1,6 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import { spawnSync } from 'bun'
+import { runCommand } from './runtime'
 
 interface CheckResult {
   passed: boolean
@@ -45,7 +45,7 @@ function checkGeminiKitVersion(): CheckResult {
 
 function checkBun(): CheckResult {
   try {
-    const { stdout } = spawnSync(['bun', '--version'])
+    const { stdout } = runCommand(['bun', '--version'])
     const version = stdout.toString().trim()
     return { passed: true, details: `(${version})` }
   }
@@ -56,7 +56,7 @@ function checkBun(): CheckResult {
 
 function checkGeminiCLI(): CheckResult {
   try {
-    const { stdout } = spawnSync(['gemini', '--version'])
+    const { stdout } = runCommand(['gemini', '--version'])
     const version = stdout.toString().trim()
     return { passed: true, details: `(${version})` }
   }

@@ -4,6 +4,7 @@ import * as path from 'node:path'
 import { config } from 'dotenv' // Load environment variables from .env file
 import { runDoctor } from './doctor'
 import { handleLogCommand } from './log'
+import { checkFileExists, readJson, runCommand } from './runtime'
 import { runSetup } from './setup'
 import { runUpdate } from './update'
 
@@ -35,7 +36,7 @@ async function main() {
     runSetup()
   }
   else if (command === 'update') {
-    runUpdate()
+    await runUpdate()
   }
   else {
     console.error(`Unknown command: ${command}`)
@@ -49,7 +50,7 @@ async function printVersion() {
     // 1. Gemini CLI Version
     let geminiVersion = 'Not installed'
     try {
-      const result = Bun.spawnSync(['gemini', '--version'], { stderr: 'ignore' })
+      const result = runCommand(['gemini', '--version'], { stderr: 'ignore' })
       if (result.stdout) {
         geminiVersion = result.stdout.toString().trim()
       }
@@ -67,15 +68,12 @@ async function printVersion() {
       // Check in Monorepo Root (Dev environment)
       const monorepoRootPath = path.resolve(__dirname, '..', '..', '..', 'package.json')
 
-      const userPkgFile = Bun.file(userNodeModulesPath)
-      const monorepoPkgFile = Bun.file(monorepoRootPath)
-
-      if (await userPkgFile.exists()) {
-        const pkg = await userPkgFile.json()
+      if (await checkFileExists(userNodeModulesPath)) {
+        const pkg = await readJson(userNodeModulesPath)
         geminiKitVersion = pkg.version
       }
-      else if (await monorepoPkgFile.exists()) {
-        const pkg = await monorepoPkgFile.json()
+      else if (await checkFileExists(monorepoRootPath)) {
+        const pkg = await readJson(monorepoRootPath)
         if (pkg.name === 'geminikit') {
           geminiKitVersion = pkg.version
         }
@@ -87,11 +85,10 @@ async function printVersion() {
 
     // 3. GeminiKit CLI Version
     const packageJsonPath = path.join(__dirname, '..', 'package.json')
-    const pkgFile = Bun.file(packageJsonPath)
     let cliVersion = 'unknown'
 
-    if (await pkgFile.exists()) {
-      const packageJson = await pkgFile.json()
+    if (await checkFileExists(packageJsonPath)) {
+      const packageJson = await readJson(packageJsonPath)
       cliVersion = packageJson.version
     }
 

@@ -1,5 +1,6 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import { runCommand } from './runtime'
 
 export function runSetup() {
   console.log('[GeminiKit] Starting setup...')
@@ -13,16 +14,19 @@ export function runSetup() {
 
 function checkAndInstallBun() {
   try {
-    Bun.spawnSync(['bun', '--version'], { stderr: 'ignore' })
+    const result = runCommand(['bun', '--version'], { stderr: 'ignore' })
+    if (result.exitCode !== 0) {
+      throw new Error('Bun not found')
+    }
   }
   catch {
     console.log('[GeminiKit] Bun not found. Installing Bun...')
     try {
       if (process.platform === 'win32') {
-        Bun.spawnSync(['powershell', '-c', '"irm bun.sh/install.ps1 | iex"'], { stdout: 'inherit' })
+        runCommand(['powershell', '-c', '"irm bun.sh/install.ps1 | iex"'], { stdout: 'inherit' })
       }
       else {
-        Bun.spawnSync(['bash', '-c', 'curl -fsSL https://bun.sh/install | bash'], { stdout: 'inherit' })
+        runCommand(['bash', '-c', 'curl -fsSL https://bun.sh/install | bash'], { stdout: 'inherit' })
       }
       console.log('[GeminiKit] Bun installed successfully.')
     }
@@ -34,14 +38,14 @@ function checkAndInstallBun() {
 
 function checkAndInstallGeminiCLI() {
   try {
-    const result = Bun.spawnSync(['gemini', '--version'], { stderr: 'ignore' })
+    const result = runCommand(['gemini', '--version'], { stderr: 'ignore' })
     if (result.exitCode !== 0)
       throw new Error('Not found')
   }
   catch {
     console.log('[GeminiKit] Gemini CLI not found. Installing @google/gemini-cli globally...')
     try {
-      Bun.spawnSync(['npm', 'install', '-g', '@google/gemini-cli'], { stdout: 'inherit' })
+      runCommand(['npm', 'install', '-g', '@google/gemini-cli'], { stdout: 'inherit' })
       console.log('[GeminiKit] Gemini CLI installed successfully.')
     }
     catch (installErr: any) {

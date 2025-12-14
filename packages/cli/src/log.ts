@@ -1,4 +1,5 @@
 import * as path from 'node:path'
+import { checkFileExists, readFile, writeFile } from './runtime'
 import { getProjectRoot, readSettings } from './utils'
 
 export async function handleLogCommand(args: string[]) {
@@ -15,8 +16,7 @@ export async function handleLogCommand(args: string[]) {
     telemetryFile = path.resolve(projectRoot, telemetryFile)
   }
 
-  const file = Bun.file(telemetryFile)
-  if (!(await file.exists())) {
+  if (!(await checkFileExists(telemetryFile))) {
     console.error(`Error: Telemetry file not found at ${telemetryFile}`)
     process.exit(1)
   }
@@ -34,7 +34,7 @@ export async function handleLogCommand(args: string[]) {
   console.log(`Reading telemetry from: ${telemetryFile}`)
   console.log(`Writing filtered log to: ${outputPath}`)
 
-  const content = await file.text()
+  const content = await readFile(telemetryFile)
   const items = parseLogContent(content)
 
   const filteredItems = items.filter(shouldLog).map((item) => {
@@ -46,7 +46,7 @@ export async function handleLogCommand(args: string[]) {
   })
 
   const outputContent = filteredItems.map(item => JSON.stringify(item, null, 2)).join('\n')
-  await Bun.write(outputPath, outputContent)
+  await writeFile(outputPath, outputContent)
 
   console.log(`Processed ${items.length} items. Wrote ${filteredItems.length} items to ${outputPath}`)
 
