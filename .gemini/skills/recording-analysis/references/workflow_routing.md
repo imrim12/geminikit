@@ -1,24 +1,21 @@
 # Workflow Routing Logic
 
-The `recording-analysis` skill uses an adaptive routing strategy to ensure stability across different environments.
+The `recording-analysis` skill uses a direct routing strategy to the Gemini Vision API.
 
 ## Decision Flow
 
-1.  **Hardware Check**:
-    -   Does `nvidia-smi` return success?
-        -   **No**: Route to **CPU Track** (PaddleOCR).
-        -   **Yes**: Proceed to Software Check.
+1.  **Environment Check**:
+    -   Is `GEMINI_API_KEY` set?
+        -   **No**: Halt execution. Prompt user to set API key.
+        -   **Yes**: Proceed to Analysis.
 
-2.  **Software Check**:
-    -   Can PyTorch access CUDA? (`torch.cuda.is_available()`)
-        -   **No**:
-            -   **Status**: `NEEDS_SETUP`.
-            -   **Action**: Halt execution. Generate `CUDA_SETUP_GUIDE.md`.
-        -   **Yes**: Route to **GPU Track** (OmniParser).
+2.  **Execution**:
+    -   All frames are processed via `.gemini/skills/screenshot-analysis/scripts/inspect.ts`.
+    -   No local GPU/CPU selection is required.
+    -   Processing is offloaded to the Gemini 1.5 Pro model.
 
 ## Backends
 
 | Backend | Hardware | Use Case | Performance |
 | :--- | :--- | :--- | :--- |
-| **OmniParser** | GPU (NVIDIA) | Complex UI analysis, Icon detection, Screen parsing | High (requires VRAM) |
-| **PaddleOCR** | CPU | Text extraction only, basic layout analysis | Low (Universal compatibility) |
+| **Gemini Vision API** | Cloud (Google) | Complex UI analysis, Icon detection, Screen parsing, Design System detection | High (Dependent on API latency) |

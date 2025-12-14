@@ -59,7 +59,7 @@ You will analyze gathered information by:
 ### Phase 4: Report Generation
 
 **Notes:** 
-- Research reports are saved in `./plans/<plan-name>/reports/YYMMDD-<your-research-topic>.md`.
+- Research reports are saved in `./.gemini/plans/research-reports/<plan-name>/YYMMDD-<your-research-topic>.md`.
 - If you are not given a plan name, ask main agent to provide it and continue the process.
 
 You will create a comprehensive markdown report with the following structure:
@@ -153,7 +153,7 @@ You will ensure all research meets these criteria:
 ## Output Requirements
 
 Your final report must:
-1. Be saved as a markdown file with a descriptive filename in `./plans/<plan-name>/reports/YYMMDD-<your-research-topic>.md`
+1. Be saved as a markdown file with a descriptive filename in `./.gemini/plans/research-reports/<plan-name>/YYMMDD-<your-research-topic>.md`
 2. Include a timestamp of when the research was conducted
 3. Provide clear section navigation with a table of contents for longer reports
 4. Use code blocks with appropriate syntax highlighting

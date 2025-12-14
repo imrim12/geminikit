@@ -15,6 +15,7 @@ A comprehensive Gemini CLI workspace kit configured as a Bun monorepo. This pack
     *   **Chrome DevTools**: Browser automation, performance analysis, and debugging via Puppeteer.
     *   **Code Review**: Protocols for rigorous technical feedback reception, review requests, and verification gates.
     *   **Debugging**: Systematic framework (Investigation, Pattern Analysis, Hypothesis, Implementation) with root cause tracing.
+    *   **Directus Manager**: Manage Directus content, schema, files, and flows via the Directus Model Context Protocol (MCP).
     *   **Frontend Design**: Aesthetic direction, strict frontend implementation rules, and high-quality image sourcing.
     *   **Media Processing**: FFmpeg and ImageMagick wrappers for optimized video/audio conversion and batch image processing.
     *   **Planning**: Structured impact analysis, architectural design, and detailed implementation planning.
@@ -68,6 +69,43 @@ After installation, run the setup command to configure the `.gemini` environment
 ```bash
 npx gk setup
 ```
+
+## Directus MCP Setup
+
+To use the **Directus Manager** skill, you must configure the MCP server in your `.gemini/settings.json` file and provide authentication credentials.
+
+### 1. Update `.gemini/settings.json`
+
+Add the following configuration to the `mcpServers` object in your `.gemini/settings.json`:
+
+```json
+"directus": {
+  "command": "npx",
+  "args": [
+    "-y",
+    "dotenv-cli",
+    "--",
+    "npx",
+    "@directus/content-mcp@latest"
+  ],
+  "env": {
+    "DIRECTUS_URL": "http://your-directus-url:8055"
+  }
+}
+```
+
+### 2. Authentication
+
+The Directus MCP server requires authentication. You must set **ONE** of the following sets of environment variables in your system or project context (e.g., via `.env` if using `dotenv-cli` or system variables):
+
+*   **Option A (Recommended):** User Credentials
+    *   `DIRECTUS_USER_EMAIL`: Your Directus user email.
+    *   `DIRECTUS_USER_PASSWORD`: Your Directus user password.
+
+*   **Option B:** Access Token
+    *   `DIRECTUS_TOKEN`: A static access token for a Directus user.
+
+Ensure `DIRECTUS_URL` is also set in the `env` section of the config or as an environment variable.
 
 ### Manual Installation & Troubleshooting
 

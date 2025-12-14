@@ -1,17 +1,22 @@
 # Error Handling Protocols
 
-## CUDA/GPU Failures
-If the GPU backend (OmniParser) fails during execution (e.g., OOM), the orchestrator should NOT automatically fallback to CPU in the current version to avoid inconsistent results. Instead, it reports the failure.
+## API Failures
+If the Gemini API fails during execution, the orchestrator reports the failure and skips the affected frame or halts if critical.
 
 ### Common Errors
 
-1.  **CUDA Out of Memory (OOM)**
-    -   *Symptom*: Python script crashes with `RuntimeError: CUDA out of memory`.
-    -   *Mitigation*: Reduce batch size or resolution. (Not yet implemented in v1).
+1.  **Authentication Error (401)**
+    -   *Symptom*: "API keys are not supported by this API" or "Unauthorized".
+    -   *Mitigation*: Verify `GEMINI_API_KEY` is a valid Google AI Studio key (starts with `AIza`).
 
-2.  **Missing Libraries**
-    -   *Symptom*: `ModuleNotFoundError`.
-    -   *Mitigation*: Ensure `requirements.txt` is installed.
+2.  **Rate Limiting (429)**
+    -   *Symptom*: Request failed due to too many requests.
+    -   *Mitigation*: The script processes frames sequentially, but large batches might still trigger limits. Retry later.
 
-## Environment Diagnosis
-The `diagnose.ts` script is the primary defense against environment errors. It must be run before any heavy lifting.
+3.  **FFmpeg Failures**
+    -   *Symptom*: "FFmpeg frame extraction failed".
+    -   *Mitigation*: Check if `ffmpeg` is installed and the input video file is not corrupted.
+
+## File System Errors
+-   **Missing Input**: Ensure the input video path is correct.
+-   **Write Permissions**: Ensure the script has write access to create `.gemini/planning/` directories.

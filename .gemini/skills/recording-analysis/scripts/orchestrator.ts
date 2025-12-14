@@ -1,7 +1,6 @@
 import { parseArgs } from 'node:util'
 import { spawn } from 'bun'
 import { existsSync, mkdirSync } from 'node:fs'
-import { join } from 'node:path'
 
 const { values } = parseArgs({
   args: Bun.argv,
@@ -29,16 +28,12 @@ async function runCommand(cmd: string[]): Promise<boolean> {
 async function main() {
   const inputFile = values.input
 
-  // 1. Read Config
-  const configFile = Bun.file('env_config.json')
-  if (!await configFile.exists()) {
-    console.error('❌ env_config.json not found. Run diagnose.ts first.')
-    process.exit(1)
+  if (!process.env.GCLOUD_PROJECT && !process.env.GOOGLE_CLOUD_PROJECT) {
+      console.error('❌ GCLOUD_PROJECT (or GOOGLE_CLOUD_PROJECT) environment variable is not set.')
+      process.exit(1)
   }
-  const config = await configFile.json()
-  console.log(`🚀 Starting analysis using backend: ${config.backend}`)
 
-  // 2. Prepare Output & Temp Directories
+  // 1. Prepare Output & Temp Directories
   const timestamp = Date.now()
   const outputDir = `.gemini/planning/${timestamp}_recording_analysis`
   const framesDir = `${outputDir}/frames`
@@ -50,7 +45,7 @@ async function main() {
   console.log(`📂 Output directory: ${outputDir}`)
   console.log(`🎞️  Frames directory: ${framesDir}`)
 
-  // 3. Extract Frames (1 frame per second)
+  // 2. Extract Frames (1 frame per second)
   console.log('running ffmpeg frame extraction...')
   const ffmpegCmd = [
     'ffmpeg',
@@ -66,20 +61,22 @@ async function main() {
     process.exit(1)
   }
 
-  // 4. Spawn Vision Processor
-  // Assuming run from project root as per GEMINI.md instructions
-  const pythonScript = '.gemini/skills/recording-analysis/tools/vision_processor.py'
+  // 3. Spawn Inspection
+  const inspectScript = '.gemini/skills/screenshot-analysis/scripts/inspect.ts'
   
-  // Note: We pass the FRAMES directory now, not the video file
+  if (!existsSync(inspectScript)) {
+      console.error(`❌ Inspection script not found at ${inspectScript}`)
+      process.exit(1)
+  }
+
+  // Use the new directory support in inspect.ts
   const cmd = [
-    'python', 
-    pythonScript, 
-    '--backend', config.backend, 
-    '--input_dir', framesDir, 
-    '--output', outputDir
+    'bun', 
+    inspectScript, 
+    '--input', framesDir
   ]
 
-  console.log(`Debugger: Running ${cmd.join(' ')}`)
+  console.log(`🚀 Running inspection on extracted frames...`)
   const procSuccess = await runCommand(cmd)
 
   if (procSuccess) {

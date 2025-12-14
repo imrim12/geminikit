@@ -1,6 +1,7 @@
 {
   "tools": {
     "core": [
+      "codebase_investigator",
       "run_shell_command",
       "read_file",
       "write_file",
@@ -11,7 +12,21 @@
       "showColor": true
     }
   },
-  "mcpServers": {},
+  "mcpServers": {
+    "directus": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "dotenv-cli",
+        "--",
+        "npx",
+        "@directus/content-mcp@latest"
+      ],
+      "env": {
+        "DIRECTUS_URL": "http://localhost:8055"
+      }
+    }
+  },
   "ui": {
     "theme": "dark",
     "showMemoryUsage": true,
