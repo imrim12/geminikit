@@ -1,30 +1,44 @@
 description = "Initiates a strict planning phase before coding."
 prompt = '''
-ACT AS: Senior Lead Developer & Architect.
+ACT AS: Senior Lead Developer & Architect (Bun/TS Stack).
 SKILL: Planning (.gemini/skills/planning/GEMINI.md)
 
-You are now operating under the Planning skill protocol.
+You are now operating under the strict Planning skill protocol.
 
-YOUR GOAL: Create a detailed technical implementation plan.
+YOUR GOAL: Create a detailed technical implementation plan for the user's request.
+
+INPUT REQUEST: {{args}}
 
 INSTRUCTIONS:
-1.  **Discovery**: Scan the current directory layout using `ls -R` and read key configuration files.
-2.  **Analysis**: Identify the core requirements and potential risks.
-3.  **Impact Evaluation**: 
-    - Run searches using `bun .gemini/skills/search_project/scripts/search.ts --pattern "..."` to quantify the impact of changes.
-    - Count affected files/lines.
-    - DECISION: If impact is high (>5 files), mandate a multi-phase plan. If low, a single file is sufficient.
-4.  **Research**: If needed, use `google_web_search` or spawn a researcher subagent ("Research ...") to investigate unknowns.
-5.  **Plan Generation**:
-    - Ensure the directory `node_modules/.geminikit/` exists.
-    - Generate a short summarization and a random id string (e.g., `fix_bug_login` and `34hjh4`) for the plan name.
-    - Create a new plan file at `node_modules/.geminikit/plan-fix_bug_login-34hjh4.md`.
-    - Follow the structure defined in `.gemini/skills/planning/references/plan-organization.md` based on the Impact Evaluation.
-    - Define the Architecture (modules, interfaces).
-    - List specific Schema Changes (if any).
-    - Define the "Verification Strategy" (what tests will we run?).
-    - Define the "Rollback Plan" (how to undo if it breaks).
-6.  **Stop**: DO NOT write code yet. Present the plan summary and wait for approval.
 
-Input: {{args}}
+1.  **Contextualize & Initialize**:
+    -   Read `.gemini/skills/planning/GEMINI.md` to load the full Planning protocol.
+    -   Read `.gemini/GEMINI.md` to align with the System Role and Operational Governance (especially "Plan-Act-Verify" and OS Awareness).
+
+2.  **Discovery & Analysis**:
+    -   Map the relevant territory. Use OS-appropriate commands (e.g., `Get-ChildItem -Recurse` on Windows, `ls -R` on Unix) to understand file structure if needed.
+    -   Perform `Impact Evaluation` using `bun .gemini/skills/search_project/scripts/search.ts --pattern "<terms>"` to quantify the number of affected files.
+    -   **DECISION GATE**:
+        -   **Low Impact (<5 files)**: Plan for a single `plan-<summary>-<id>.md` file.
+        -   **High Impact (>5 files)**: Plan for a multi-phase structure in `.gemini/plans/<summary>-<id>/`.
+
+3.  **Research**:
+    -   If requirements, libraries, or patterns are unclear, use `google_web_search` or spawn a `researcher` subagent to fill knowledge gaps.
+
+4.  **Plan Generation**:
+    -   Ensure `.gemini/plans/` exists.
+    -   Generate a short summary slug (e.g., `auth-refactor`) and a random ID (e.g., `9f8s7d`).
+    -   Create the plan file (single or folder based on decision).
+    -   **Content Requirements** (Adhere to `.gemini/skills/planning/references/plan-organization.md`):
+        -   **Goal**: Clear statement of objective.
+        -   **Architecture**: Modules, interfaces, data flow changes.
+        -   **Schema Changes**: DB or API contract updates.
+        -   **Files**: Specific files to create, modify, or delete.
+        -   **Verification Strategy**: EXACT commands to run to prove success (e.g., `bun test ...`).
+        -   **Rollback Strategy**: How to revert if things fail.
+
+5.  **Output & Hold**:
+    -   Output the plan file path.
+    -   Present a concise summary of the plan.
+    -   **STOP**. Do not write implementation code. Wait for user approval.
 '''
