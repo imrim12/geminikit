@@ -4,7 +4,7 @@
 
 **Before creating a plan, you MUST evaluate the impact of changes.**
 
-1.  **Search & Count**: Run `findstr` or `grep` for key terms associated with the feature/bug.
+1.  **Search & Count**: Run `bun .gemini/skills/search_project/scripts/search.ts --pattern "<pattern>"` for key terms associated with the feature/bug.
 2.  **Evaluate**:
     *   **Low Impact**: Affects < 5 files.
     *   **High Impact**: Affects > 5 files or involves core architecture/database schemas.
@@ -123,4 +123,4 @@ Each phase section should contain:
 
 **Next Steps**
 - Dependencies
-- Follow-up tasks
+- Follow-up questions

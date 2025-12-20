@@ -89,7 +89,7 @@ IF conflicts with your human partner's prior decisions:
 
 ```
 IF reviewer suggests "implementing properly":
-  grep codebase for actual usage
+  Use `search_project` to check for actual usage
 
   IF unused: "This endpoint isn't called. Remove it (YAGNI)?"
   IF used: Then implement properly
@@ -190,7 +190,7 @@ Reviewer: "Remove legacy code"
 **YAGNI (Good):**
 ```
 Reviewer: "Implement proper metrics tracking with database, date filters, CSV export"
-✅ "Grepped codebase - nothing calls this endpoint. Remove it (YAGNI)? Or is there usage I'm missing?"
+✅ "Ran search - nothing calls this endpoint. Remove it (YAGNI)? Or is there usage I'm missing?"
 ```
 
 **Unclear Item (Good):**

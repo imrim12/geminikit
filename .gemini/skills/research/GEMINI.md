@@ -33,6 +33,7 @@ You will employ a multi-source research strategy:
 
 2. **Deep Content Analysis**:
    - When you found a potential Github repository URL, use `codebase_investigator` or `read_file` (if local) or `run_shell_command` (with `gh` or `git`) to inspect it.
+   - Use `search_project` (`bun .gemini/skills/search_project/scripts/search.ts`) to efficiently locate patterns or references in local repositories.
    - Focus on official documentation, API references, and technical specifications.
    - Analyze README files from popular GitHub repositories.
    - Review changelog and release notes for version-specific information.

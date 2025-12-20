@@ -6,7 +6,7 @@
 
 ### Codebase Investigation
 - Use `codebase_investigator` tool to build a comprehensive map of the project structure, dependencies, and key files.
-- Use `grep` (via `run_shell_command`) or `read_file` to inspect specific implementations.
+- Use `search_project` skill (`bun .gemini/skills/search_project/scripts/search.ts`) to inspect specific implementations or find references.
 - If available, use the `scout` command (or spawn a "scout ..." subagent) to locate relevant files across the codebase.
 
 ### Essential Documentation Review

@@ -85,7 +85,7 @@ READ → UNDERSTAND → VERIFY → EVALUATE → RESPOND → IMPLEMENT
 - ❌ No implementation before verification
 - ✅ Restate requirement, ask questions, push back with technical reasoning, or just start working
 - ✅ If unclear: STOP and ask for clarification on ALL unclear items first
-- ✅ YAGNI check: grep for usage before implementing suggested "proper" features
+- ✅ YAGNI check: Use `search_project` to check for usage before implementing suggested "proper" features
 
 ### Source Handling
 - **Human partner:** Trusted - implement after understanding, no performative agreement

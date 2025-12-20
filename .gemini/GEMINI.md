@@ -7,8 +7,8 @@ You are an intelligent, autonomous agent capable of complex reasoning and execut
 ### 0. OPERATING SYSTEM AWARENESS
 - **Before suggesting or executing any shell command**, always first determine the user's operating system from the context provided at the start of the session (e.g., `win32`, `linux`, `darwin`).
 - **Adapt commands accordingly**:
-    - For `win32` (Windows), use PowerShell commands (e.g., `New-Item -ItemType Directory <path>` for `mkdir`, `Get-ChildItem -Recurse <path>` for `ls -R`, `Select-String -Path <files> -Pattern <pattern>` for `grep`).
-    - For `linux` or `darwin` (macOS), use standard Unix-like commands (e.g., `mkdir`, `ls -R`, `grep`).
+    - For `win32` (Windows), use PowerShell commands (e.g., `New-Item -ItemType Directory <path>` for `mkdir`, `Get-ChildItem -Recurse <path>` for `ls -R`).
+    - For `linux` or `darwin` (macOS), use standard Unix-like commands (e.g., `mkdir`, `ls -R`).
 - **If unsure of the equivalent command**, perform a quick `google_web_search` for "powershell equivalent of <unix command>" or "bash equivalent of <powershell command>".
 
 1.  **NO BLIND EXECUTION**:
@@ -17,7 +17,7 @@ You are an intelligent, autonomous agent capable of complex reasoning and execut
 
 2.  **PLANNING FIRST (The "Plan-Act-Verify" Loop)**:
     - For any task involving >1 file or complex logic, you **MUST** first draft a plan.
-    - **Impact Evaluation**: Before planning, run string/file searches (refer to "0. OPERATING SYSTEM AWARENESS" for OS-specific commands) to count occurrences of affected terms/files.
+    - **Impact Evaluation**: Before planning, run string/file searches using `bun .gemini/skills/search_project/scripts/search.ts --pattern "<pattern>"` to count occurrences of affected terms/files. **Do NOT use `grep` or `Select-String` directly.**
         - **Low Impact (<5 files)**: Use a simple single-file plan.
         - **High Impact (>5 files)**: Use a detailed, multi-phase plan structure.
     - Create or update a plan file in `.gemini/plans/` named `plan-<plan_short_summarization>-<Random ID>.md` (e.g., `.gemini/plans/plan-implement_authentication-34hjh4.md`).
@@ -30,7 +30,7 @@ You are an intelligent, autonomous agent capable of complex reasoning and execut
 3.  **DISCOVERY PHASE**:
     - Before editing code, you **MUST** map the territory.
     - Use OS-appropriate commands (refer to "0. OPERATING SYSTEM AWARENESS") to understand the directory structure (e.g., `ls -R` or `Get-ChildItem -Recurse`).
-    - Use OS-appropriate commands (refer to "0. OPERATING SYSTEM AWARENESS") or `read_file` to inspect relevant files (e.g., `grep` or `Select-String`).
+    - Use `bun .gemini/skills/search_project/scripts/search.ts --pattern "<pattern>"` to find code. **Avoid raw `grep`, `findstr`, or `Select-String` as they are slow and token-heavy.**
     - Do not hallucinate file paths; verify them against the file system.
 
 4.  **VERIFICATION IS MANDATORY**:

@@ -273,7 +273,7 @@ async function main() {
         components: components,
       });
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(`❌ Error processing ${fileName}:`, error);
     }
   }
@@ -314,7 +314,7 @@ async function main() {
       const text = response.candidates?.[0]?.content?.parts?.[0]?.text || "";
       await Bun.write(join(outputDir, `analysis-reusable-components.md`), text);
       console.log(`✅ Saved: analysis-reusable-components.md`);
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Cross-analysis failed:", error);
     }
   } else {

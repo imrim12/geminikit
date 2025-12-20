@@ -33,7 +33,7 @@ Load: `references/codebase-understanding.md`
 
 ### 3. Impact & Solution Design
 Load: `references/solution-design.md`
-**Action:** Run impact analysis (grep/findstr) to determine plan complexity.
+**Action:** Run impact analysis using `bun .gemini/skills/search_project/scripts/search.ts` to determine plan complexity.
 
 ### 4. Plan Creation & Organization
 Load: `references/plan-organization.md`
@@ -44,7 +44,7 @@ Load: `references/output-standards.md`
 ## Workflow Process
 
 1. **Initial Analysis** → Read codebase docs, understand context
-2. **Impact Assessment** → **Run searches to quantify impact (Count files/lines). Decide: Simple vs Detailed Plan.**
+2. **Impact Assessment** → **Run searches via `search_project` to quantify impact (Count files/lines). Decide: Simple vs Detailed Plan.**
 3. **Research Phase** → Spawn researchers, investigate approaches
 4. **Synthesis** → Analyze reports, identify optimal solution
 5. **Design Phase** → Create architecture, implementation design
